@@ -1,0 +1,458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="PostEffect">
+      <UniqueIdentifier>{591e54ba-1a99-4480-a1fe-6cebc52d2421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\SMAA">
+      <UniqueIdentifier>{ff27fb0d-599d-45c9-bda8-37aa17711802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\FXAA">
+      <UniqueIdentifier>{ace7bce0-82b8-4e30-8f46-a64ca266506e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\CrossFilter">
+      <UniqueIdentifier>{3feaf366-51dc-483b-88f4-10b54f447dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\SSSSS">
+      <UniqueIdentifier>{e0f38b15-ad63-4ba6-832f-7a0b022eca48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\ShadowMap">
+      <UniqueIdentifier>{c8cd2c33-d4cc-4336-9bc2-b30b0709f708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\GaussBlur">
+      <UniqueIdentifier>{69d28364-92a0-47ae-9353-54b3b4153829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{242ab9d8-96e6-4d3b-b7da-7ea1b1e2758e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{691a498d-89aa-4c1e-ad5d-e672d4e9b109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaScript">
+      <UniqueIdentifier>{1facb8bf-d91a-4777-831e-b3c95f911c33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeferredRendering">
+      <UniqueIdentifier>{6da9b15d-a11c-451d-8c4e-56e378cf40a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{1383bae4-50d9-4359-96a4-78b7a2762eef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DSprite">
+      <UniqueIdentifier>{472252c7-4182-4753-bbfd-9acdb32343a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{84856090-8192-4f42-b048-862bafb5b104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{0b416eab-283e-4caa-a134-78384a5cf2db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{ef294042-0d35-4d09-bf9a-1710c3ed7959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithm">
+      <UniqueIdentifier>{a715d7e0-383d-44ba-aced-ca0a981f1322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{658da844-6c8d-4fb0-bfd0-01b84499b260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSystem">
+      <UniqueIdentifier>{cefb78b6-26ed-40c9-a5f4-05a4e46629d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{73fd49c8-e9e3-41bb-8862-d19de7374662}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\PostEffects.cpp">
+      <Filter>PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SMAntialiasing.cpp">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SMAAEdge.cpp">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SMAABlendingWeight.cpp">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SMAABlending.cpp">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FXAntialiasing.cpp">
+      <Filter>PostEffect\FXAA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CrossFilter.cpp">
+      <Filter>PostEffect\CrossFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScreenSpaceSSS.cpp">
+      <Filter>PostEffect\SSSSS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowMap.cpp">
+      <Filter>PostEffect\ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GaussBlur.cpp">
+      <Filter>PostEffect\GaussBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectX11.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WinMain.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeferredBaseModel.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FbxLoad.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh3D.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\XFileLoad.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LuaActor.cpp">
+      <Filter>LuaScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LuaCoroutine.cpp">
+      <Filter>LuaScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LuaFunc.cpp">
+      <Filter>LuaScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LuaManager.cpp">
+      <Filter>LuaScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeferredConst.cpp">
+      <Filter>DeferredRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeferredRendering.cpp">
+      <Filter>DeferredRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTarget.cpp">
+      <Filter>DeferredRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderMonitoring.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderStruct.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tessellation.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BillBoard.cpp">
+      <Filter>2DSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteDraw.cpp">
+      <Filter>2DSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComboBox.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontDraw.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MemoryMonitor.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ProcessMonitor.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TimeCheck.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MatrixCoord.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HitCheck.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\KDTree.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OrientedBoundingBox.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureManager.cpp">
+      <Filter>2DSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectionalLight.cpp">
+      <Filter>GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>GameSystem</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\PostEffects.h">
+      <Filter>PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SMAntialiasing.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AreaTex.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SearchTex.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="HLSL\SMAA.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SMAAEdge.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SMAABlendingWeight.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SMAABlending.h">
+      <Filter>PostEffect\SMAA</Filter>
+    </ClInclude>
+    <ClInclude Include="HLSL\FXAA.h">
+      <Filter>PostEffect\FXAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FXAntialiasing.h">
+      <Filter>PostEffect\FXAA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CrossFilter.h">
+      <Filter>PostEffect\CrossFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ScreenSpaceSSS.h">
+      <Filter>PostEffect\SSSSS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShadowMap.h">
+      <Filter>PostEffect\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GaussBlur.h">
+      <Filter>PostEffect\GaussBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirectX11.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirectXData.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CompileOptions.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontDraw.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WindProc.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WinMain.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeferredBaseModel.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FbxLoad.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vertex.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\XFileLoad.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LuaActor.h">
+      <Filter>LuaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LuaConvert.h">
+      <Filter>LuaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LuaCoroutine.h">
+      <Filter>LuaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LuaFunc.h">
+      <Filter>LuaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LuaManager.h">
+      <Filter>LuaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeferredConst.h">
+      <Filter>DeferredRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeferredRendering.h">
+      <Filter>DeferredRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderTarget.h">
+      <Filter>DeferredRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderMonitoring.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderStruct.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tessellation.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GBuffer.h">
+      <Filter>DeferredRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BillBoard.h">
+      <Filter>2DSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteDraw.h">
+      <Filter>2DSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh3D.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoneStruct.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ComboBox.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MemoryMonitor.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ProcessMonitor.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TimeCheck.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MatrixCoord.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HitCheck.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KDTree.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OrientedBoundingBox.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConstantBuffer.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureManager.h">
+      <Filter>2DSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirectionalLight.h">
+      <Filter>GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>GameSystem</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="HLSL\BoneCalculation.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\CelShading.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\CrossFilter.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\Deferred1.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\DeferredBaseLighting.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\DepthOfField.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\FXAAShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\GaussBlur.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\GaussianFilterX.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\GaussianFilterY.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\PerlinNoise.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\RadialBlur.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\ScreenSpaceSubsurfaceScattering.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\ShaderCBuffer.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\ShaderStruct.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\ShadowMap.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\SMAABlending.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\SMAABlendingWeight.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\SMAAEdge.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\Sprite2DDraw.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\WaveSimulation.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

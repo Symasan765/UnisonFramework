@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{87AB19C7-16A0-4358-A851-D8D6D66FE819}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DirectX11Lib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\work\DirectX11Lib\Lua\include;C:\DirectXTK\Inc;C:\Program Files\Autodesk\FBX\FBX SDK\2017.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\work\DirectX11Lib\Lua\lib;C:\work\DirectX11Lib\lib\Debug;C:\Program Files\Autodesk\FBX\FBX SDK\2017.1\lib\vs2015\x86\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\work\DirectX11Lib\Lua\include;C:\Program Files\Autodesk\FBX\FBX SDK\2017.1\include;C:\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\work\DirectX11Lib\Lua\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2017.1\lib\vs2015\x86\release;C:\work\DirectX11Lib\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\BillBoard.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\ComboBox.cpp" />
+    <ClCompile Include="src\CrossFilter.cpp" />
+    <ClCompile Include="src\DeferredBaseModel.cpp" />
+    <ClCompile Include="src\DeferredConst.cpp" />
+    <ClCompile Include="src\DeferredRendering.cpp" />
+    <ClCompile Include="src\DirectionalLight.cpp" />
+    <ClCompile Include="src\DirectX11.cpp" />
+    <ClCompile Include="src\FbxLoad.cpp" />
+    <ClCompile Include="src\FontDraw.cpp" />
+    <ClCompile Include="src\FXAntialiasing.cpp" />
+    <ClCompile Include="src\GameScene.cpp" />
+    <ClCompile Include="src\GaussBlur.cpp" />
+    <ClCompile Include="src\HitCheck.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\KDTree.cpp" />
+    <ClCompile Include="src\LuaActor.cpp" />
+    <ClCompile Include="src\LuaCoroutine.cpp" />
+    <ClCompile Include="src\LuaFunc.cpp" />
+    <ClCompile Include="src\LuaManager.cpp" />
+    <ClCompile Include="src\MainScene.cpp" />
+    <ClCompile Include="src\MatrixCoord.cpp" />
+    <ClCompile Include="src\MemoryMonitor.cpp" />
+    <ClCompile Include="src\Mesh3D.cpp" />
+    <ClCompile Include="src\OrientedBoundingBox.cpp" />
+    <ClCompile Include="src\PostEffects.cpp" />
+    <ClCompile Include="src\ProcessMonitor.cpp" />
+    <ClCompile Include="src\RenderTarget.cpp" />
+    <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\ScreenSpaceSSS.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\ShaderMonitoring.cpp" />
+    <ClCompile Include="src\ShaderStruct.cpp" />
+    <ClCompile Include="src\ShadowMap.cpp" />
+    <ClCompile Include="src\SMAABlending.cpp" />
+    <ClCompile Include="src\SMAABlendingWeight.cpp" />
+    <ClCompile Include="src\SMAAEdge.cpp" />
+    <ClCompile Include="src\SMAntialiasing.cpp" />
+    <ClCompile Include="src\SpriteDraw.cpp" />
+    <ClCompile Include="src\Tessellation.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
+    <ClCompile Include="src\TimeCheck.cpp" />
+    <ClCompile Include="src\WinMain.cpp" />
+    <ClCompile Include="src\XFileLoad.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HLSL\FXAA.h" />
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\AreaTex.h" />
+    <ClInclude Include="src\BillBoard.h" />
+    <ClInclude Include="src\BoneStruct.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\ComboBox.h" />
+    <ClInclude Include="src\CompileOptions.h" />
+    <ClInclude Include="src\ConstantBuffer.h" />
+    <ClInclude Include="src\CrossFilter.h" />
+    <ClInclude Include="src\DeferredBaseModel.h" />
+    <ClInclude Include="src\DeferredConst.h" />
+    <ClInclude Include="src\DeferredRendering.h" />
+    <ClInclude Include="src\DirectionalLight.h" />
+    <ClInclude Include="src\DirectX11.h" />
+    <ClInclude Include="src\DirectXData.h" />
+    <ClInclude Include="src\FbxLoad.h" />
+    <ClInclude Include="src\FontDraw.h" />
+    <ClInclude Include="src\FXAntialiasing.h" />
+    <ClInclude Include="src\GameScene.h" />
+    <ClInclude Include="src\GaussBlur.h" />
+    <ClInclude Include="src\GBuffer.h" />
+    <ClInclude Include="src\HitCheck.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\KDTree.h" />
+    <ClInclude Include="src\LuaActor.h" />
+    <ClInclude Include="src\LuaConvert.h" />
+    <ClInclude Include="src\LuaCoroutine.h" />
+    <ClInclude Include="src\LuaFunc.h" />
+    <ClInclude Include="src\LuaManager.h" />
+    <ClInclude Include="src\MainScene.h" />
+    <ClInclude Include="src\MatrixCoord.h" />
+    <ClInclude Include="src\MemoryMonitor.h" />
+    <ClInclude Include="src\Mesh3D.h" />
+    <ClInclude Include="src\OrientedBoundingBox.h" />
+    <ClInclude Include="src\PostEffects.h" />
+    <ClInclude Include="src\ProcessMonitor.h" />
+    <ClInclude Include="src\RenderTarget.h" />
+    <ClInclude Include="src\SceneManager.h" />
+    <ClInclude Include="src\ScreenSpaceSSS.h" />
+    <ClInclude Include="src\SearchTex.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\ShaderMonitoring.h" />
+    <ClInclude Include="src\ShaderStruct.h" />
+    <ClInclude Include="src\ShadowMap.h" />
+    <ClInclude Include="src\SMAABlending.h" />
+    <ClInclude Include="src\SMAABlendingWeight.h" />
+    <ClInclude Include="src\SMAAEdge.h" />
+    <ClInclude Include="src\SMAntialiasing.h" />
+    <ClInclude Include="src\SpriteDraw.h" />
+    <ClInclude Include="src\Tessellation.h" />
+    <ClInclude Include="src\TextureManager.h" />
+    <ClInclude Include="src\TimeCheck.h" />
+    <ClInclude Include="src\Vertex.h" />
+    <ClInclude Include="src\WindProc.h" />
+    <ClInclude Include="src\WinMain.h" />
+    <ClInclude Include="src\XFileLoad.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="HLSL\BoneCalculation.hlsl" />
+    <FxCompile Include="HLSL\CelShading.hlsl" />
+    <FxCompile Include="HLSL\CrossFilter.hlsl" />
+    <FxCompile Include="HLSL\Deferred1.hlsl" />
+    <FxCompile Include="HLSL\DeferredBaseLighting.hlsl" />
+    <FxCompile Include="HLSL\DepthOfField.hlsl" />
+    <FxCompile Include="HLSL\FXAAShader.hlsl" />
+    <FxCompile Include="HLSL\GaussBlur.hlsl" />
+    <FxCompile Include="HLSL\GaussianFilterX.hlsl" />
+    <FxCompile Include="HLSL\GaussianFilterY.hlsl" />
+    <FxCompile Include="HLSL\PerlinNoise.hlsl" />
+    <FxCompile Include="HLSL\RadialBlur.hlsl" />
+    <FxCompile Include="HLSL\ScreenSpaceSubsurfaceScattering.hlsl" />
+    <FxCompile Include="HLSL\ShaderCBuffer.hlsl" />
+    <FxCompile Include="HLSL\ShaderStruct.hlsl" />
+    <FxCompile Include="HLSL\ShadowMap.hlsl" />
+    <ClInclude Include="HLSL\SMAA.h" />
+    <FxCompile Include="HLSL\SMAABlending.hlsl" />
+    <FxCompile Include="HLSL\SMAABlendingWeight.hlsl" />
+    <FxCompile Include="HLSL\SMAAEdge.hlsl" />
+    <FxCompile Include="HLSL\Sprite2DDraw.hlsl" />
+    <FxCompile Include="HLSL\WaveSimulation.hlsl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
