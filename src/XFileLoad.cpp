@@ -269,6 +269,8 @@ void cXFileLoad::CreateMesh3D(Mesh3D * pMesh, XFileLoadMeshBuf *data)
 		pMesh->vpVertexData[i].vPos.y = data->vFace.vVertex[i].vPos.y;
 		pMesh->vpVertexData[i].vPos.z = data->vFace.vVertex[i].vPos.z;
 		pMesh->vpVertexData[i].vPos.w = data->vFace.vVertex[i].vPos.w;
+		if (pMesh->vpVertexData[i].vPos.z > 1.0f)
+			int b = 10;
 
 		//法線
 		pMesh->vpVertexData[i].vNorm.x = data->vFace.vVertex[i].vNormal.x;
@@ -552,6 +554,9 @@ void cXFileLoad::GetMaterialList(std::ifstream * _pFP, XFileLoadMeshBuf * _outpu
 			getline(*_pFP, buf);		//改行
 	}
 	getline(*_pFP, buf);		//改行
+
+	if (buf == "")
+		getline(*_pFP, buf);		//改行
 }
 
 /// <summary>
@@ -623,18 +628,41 @@ void cXFileLoad::GetMeshBone(std::ifstream * _pFP, XFileLoadMeshBuf * _output)
 				//初めて格納する場合は読み込んだ時の初期化を行う
 				_output->vFace.vVertex[ID].vBoneNo = { (uint32_t)BoneNo,0,0,0 };
 				_output->vFace.vVertex[ID].vWeight.x = weight;
+				_output->vFace.vVertex[ID].vBoneCnt++;
 				break;
 			case 1:
 				_output->vFace.vVertex[ID].vBoneNo.y = (uint32_t)BoneNo;
 				_output->vFace.vVertex[ID].vWeight.y = weight;
+				_output->vFace.vVertex[ID].vBoneCnt++;
 				break;
 			case 2:
 				_output->vFace.vVertex[ID].vBoneNo.z = (uint32_t)BoneNo;
 				_output->vFace.vVertex[ID].vWeight.z = weight;
+				_output->vFace.vVertex[ID].vBoneCnt++;
 				break;
 			case 3:
 				_output->vFace.vVertex[ID].vBoneNo.w = (uint32_t)BoneNo;
 				_output->vFace.vVertex[ID].vWeight.w = weight;
+				_output->vFace.vVertex[ID].vBoneCnt++;
+				break;
+			default:
+				//MessageBox(0, "このXファイルは頂点に４つ以上のウェイトが付いています", NULL, MB_OK);
+				//頂点の中で最も重みの低いものを見つけ排除すする
+				bool weightFlag = false;
+				if (_output->vFace.vVertex[ID].vWeight.x < weight) weightFlag = true;
+				if (_output->vFace.vVertex[ID].vWeight.y < weight) weightFlag = true;
+				if (_output->vFace.vVertex[ID].vWeight.z < weight) weightFlag = true;
+				if (_output->vFace.vVertex[ID].vWeight.w < weight) weightFlag = true;
+
+				float* LightestWeight = &_output->vFace.vVertex[ID].vWeight.x;		//一番軽いものを入れる。
+				if (*LightestWeight > _output->vFace.vVertex[ID].vWeight.y) LightestWeight = &_output->vFace.vVertex[ID].vWeight.y;
+				if (*LightestWeight > _output->vFace.vVertex[ID].vWeight.z) LightestWeight = &_output->vFace.vVertex[ID].vWeight.z;
+				if (*LightestWeight > _output->vFace.vVertex[ID].vWeight.w) LightestWeight = &_output->vFace.vVertex[ID].vWeight.w;
+
+				//一番軽いものより重ければ数値をより大きなものを格納する
+				if (*LightestWeight < weight) 
+					*LightestWeight = weight;
+				
 				break;
 			}
 
@@ -701,6 +729,9 @@ int cXFileLoad::CheckType(std::string _FileName)
 			m_BoneInMotion[m_MotionNum] = CountAnimeBone(&pFP);
 			m_MotionNum++;		//モーション数をカウント
 			pFP >> buf;
+		}
+		if (buf == "//") {
+			getline(pFP, buf);		//templateは一行飛ばす
 		}
 		else {
 			pFP >> buf;
@@ -826,7 +857,7 @@ int cXFileLoad::CountAnimeBone(std::ifstream * _pFP)
 	getline(*_pFP, buf);		//ここにはアニメーションの名前が入ってくる
 	*_pFP >> buf;		//ここに"Animetion"が入る
 
-	while (buf != "}") {
+	while (buf != "}" && !(_pFP->eof())) {
 		getline(*_pFP, buf);		//改行
 		BoneNum++;		//数をカウント
 
@@ -857,9 +888,13 @@ void cXFileLoad::GetAnimation(std::ifstream * _pFP, cAnimationData *& _output)
 
 	//ここからがデータの読み込み。アニメーション数分のデータを取得していく
 	for (int i = 0; i < m_MotionNum; i++) {
-		*_pFP >> buf;				//ここで"AnimetionSet"を取得。
-		getline(*_pFP, buf);		//その行を改行させる
+		while (buf != "AnimationSet") {
+			*_pFP >> buf;
+			if(buf == "//")
+				getline(*_pFP, buf);		//その行を改行させる
+		}
 
+		getline(*_pFP, buf);		//その行を改行させる
 		//ボーン数分のデータを読み込んでいく
 		for (int j = 0; j < m_BoneInMotion[i]; j++) {
 			*_pFP >> buf;				//ここで"Animetion"を取得。
@@ -879,10 +914,25 @@ void cXFileLoad::GetKeyFrame(std::ifstream * _pFP, BoneAnime * _pBone)
 {
 	//ここに来た時点で次に読み込めるものはAnimationKeyになっている前提
 	string buf = "Start!";
+	string boneNameBuf = "ERROR";
+	//Brenderのデータをここでいきなりボーン名が入る。
+	//ここの段階でAnimationKeyが来ていなければボーン名を保持しておかなければいけない
+	bool BonesAreInFrontFlag = false;
+	*_pFP >> buf;	//ここにAnimationKeyが来ているのが正常だがblender等ではここに｛｝付きのボーン名が来る
+	if (buf != "AnimationKey") {
+		boneNameBuf = buf;
+		BonesAreInFrontFlag = true;	//ボーン名が前方に入ってる
+	}
 
-	while (buf != "{")		//この"{"はキーフレームの後に来るボーン名が入っているスコープの入口
+	while (buf != "{" && !(_pFP->eof()))		//この"{"はキーフレームの後に来るボーン名が入っているスコープの入口
 	{
-		*_pFP >> buf;
+		if (buf != "AnimationKey") {
+			*_pFP >> buf;
+			if (BonesAreInFrontFlag) {
+				if (buf == "}")
+					break;
+			}
+		}
 		if (buf == "AnimationKey") {
 			getline(*_pFP, buf);		//その行を改行させる
 			*_pFP >> buf;		//ここに来るのはキーフレームのタイプ(0 = 回転, 1 = 拡大, 2 = 移動, 3 = 行列)
@@ -980,19 +1030,35 @@ void cXFileLoad::GetKeyFrame(std::ifstream * _pFP, BoneAnime * _pBone)
 	}		// end while
 
 	//最後にボーン番号を取得して完了
-	*_pFP >> buf;	//ボーンの名前が入る
-	bool BoneNameFindFlag = false;
-	for (int i = 0; i < m_Suffix; i++) {
-		if (m_Bones[i].vName == buf) {
-			_pBone->vBoneNo = i;		//ボーン番号を見つけた！
-			BoneNameFindFlag = true;
+	// ボーン名が規則通りに後方に入っていた場合はここでボーンを取得する
+	if (BonesAreInFrontFlag == false) {
+		*_pFP >> buf;	//ボーンの名前が入る
+		bool BoneNameFindFlag = false;
+		for (int i = 0; i < m_Suffix; i++) {
+			if (m_Bones[i].vName == buf) {
+				_pBone->vBoneNo = i;		//ボーン番号を見つけた！
+				BoneNameFindFlag = true;
+			}
+		}
+		if (!BoneNameFindFlag) {
+			_pBone->vBoneNo = -1;
+		}
+		getline(*_pFP, buf);		//ボーンの列を改行
+		getline(*_pFP, buf);		//アニメーションの分の改行
+	}
+	else {
+		//ボーン名が前方に入っていた場合はこちら
+		bool BoneNameFindFlag = false;
+		for (int i = 0; i < m_Suffix; i++) {
+			if (std::string("{") + m_Bones[i].vName + std::string("}") == boneNameBuf) {
+				_pBone->vBoneNo = i;		//ボーン番号を見つけた！
+				BoneNameFindFlag = true;
+			}
+		}
+		if (!BoneNameFindFlag) {
+			_pBone->vBoneNo = -1;
 		}
 	}
-	if (!BoneNameFindFlag) {
-		_pBone->vBoneNo = -1;
-	}
-	getline(*_pFP, buf);		//ボーンの列を改行
-	getline(*_pFP, buf);		//アニメーションの分の改行
 }
 
 

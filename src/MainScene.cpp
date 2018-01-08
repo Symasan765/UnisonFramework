@@ -12,9 +12,12 @@ cMainScene::cMainScene()
 	m_pModel = new cDeferredModel;
 	m_pModel->LoadData("Link.x", 1);
 	m_DirectionalLight.SetLightPos(DirectX::XMFLOAT4{ 1.0f,0.0f,0.0f,1.0f });
-	m_pModel->Rotation(0.0f, 180.0f, 0.0f);
-	m_CameraData.SetPosition({ 0.0f,10.0f,-80.0f });
-	m_CameraData.SetLookPoint({ 0.0f,10.0f,0.0f });
+	m_pModel->Rotation(90.0f, 0.0f, 0.0f);
+	/*m_CameraData.SetPosition({ 0.0f,10.0f,-80.0f });
+	m_CameraData.SetLookPoint({ 0.0f,10.0f,0.0f });*/
+
+	m_CameraData.SetPosition({ 0.0f,0.2f,-2.0f });
+	m_CameraData.SetLookPoint({ 0.0f,0.2f,0.0f });
 }
 
 cMainScene::~cMainScene()
@@ -24,12 +27,14 @@ cMainScene::~cMainScene()
 
 void cMainScene::Update()
 {
-	m_pModel->Rotation(0.0f, 1.0f, 0.0f);
+	//m_pModel->Rotation(0.0f, 1.0f, 0.0f);
 }
 
 void cMainScene::MeshDraw()
 {
-	m_pModel->DrawMesh();
+	static int a = 0;
+	m_pModel->DrawMesh(0,a);
+	a++;
 }
 
 void cMainScene::UIDraw()

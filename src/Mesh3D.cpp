@@ -75,6 +75,7 @@ void MeshManager::SetBoneConstant(const BoneData* _bone, const int _Num, int pas
 		Mat[i] = offset * Mat[i];
 		XMStoreFloat4x4(&m, Mat[i]);
 		DirectX::XMStoreFloat4x4(&m_Bone.data.m[i], DirectX::XMMatrixTranspose(Mat[i]));		//ボーンをセットする
+		int a = 10;
 	}
 
 	m_Bone.Set(pass);

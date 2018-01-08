@@ -24,7 +24,7 @@ struct VS_OUTPUT
     float2 Tex : TEXCOORD0;
 };
 
-VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
+VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEX)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
     output.Pos = mul(Pos, g_mWVP);

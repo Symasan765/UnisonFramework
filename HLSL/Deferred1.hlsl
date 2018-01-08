@@ -25,13 +25,15 @@ INPUT_RAW_DATA VS(
 	)
 {
     INPUT_RAW_DATA output = (INPUT_RAW_DATA) 0;
-
 	//スタティックメッシュの場合、ボーン計算を無視する
     if (Bones.x != STATIC_MESH)
     {
          //ボーンを適用したローカル座標に更新する
         Skin skinPos = SkinVert(Pos, Normal, Bones, Weights);
+		float4 buf = Pos;
         Pos = skinPos.Pos;
+		if(Pos.w == 0.0f)
+			Pos.w = 1.0f;
         Normal = skinPos.Normal;
     }
 
