@@ -15,6 +15,7 @@
 #include "CrossFilter.h"
 //#include "SMAntialiasing.h"
 #include "FXAntialiasing.h"
+#include "OutlineEmphasis.h"
 
 /// <summary>
 /// シーンを管理する。ゲームを通して一つでいいのでシングルトンとする
@@ -87,6 +88,7 @@ private:
 	cScreenSpaceSSS* m_SSSSS;
 	cCrossFilter* m_CrossFilter;
 	cFXAA* m_SMAA;
+	cOutlineEmphasis* m_OutlineEmphasis;
 	//=====処理時間計測=====
 	cTimeCheck m_TimeUpdate;				//ゲームアップデートの処理時間計測を行う
 	cTimeCheck m_TimeDraw;					//描画の処理時間計測を行う

@@ -187,6 +187,7 @@
     <ClCompile Include="src\MemoryMonitor.cpp" />
     <ClCompile Include="src\Mesh3D.cpp" />
     <ClCompile Include="src\OrientedBoundingBox.cpp" />
+    <ClCompile Include="src\OutlineEmphasis.cpp" />
     <ClCompile Include="src\PostEffects.cpp" />
     <ClCompile Include="src\ProcessMonitor.cpp" />
     <ClCompile Include="src\RenderTarget.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="src\MemoryMonitor.h" />
     <ClInclude Include="src\Mesh3D.h" />
     <ClInclude Include="src\OrientedBoundingBox.h" />
+    <ClInclude Include="src\OutlineEmphasis.h" />
     <ClInclude Include="src\PostEffects.h" />
     <ClInclude Include="src\ProcessMonitor.h" />
     <ClInclude Include="src\RenderTarget.h" />
@@ -277,6 +279,7 @@
     <FxCompile Include="HLSL\GaussBlur.hlsl" />
     <FxCompile Include="HLSL\GaussianFilterX.hlsl" />
     <FxCompile Include="HLSL\GaussianFilterY.hlsl" />
+    <FxCompile Include="HLSL\OutlineEmphasis.hlsl" />
     <FxCompile Include="HLSL\PerlinNoise.hlsl" />
     <FxCompile Include="HLSL\RadialBlur.hlsl" />
     <FxCompile Include="HLSL\ScreenSpaceSubsurfaceScattering.hlsl" />
