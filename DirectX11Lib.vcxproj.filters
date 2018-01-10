@@ -73,6 +73,9 @@
     <Filter Include="HLSL">
       <UniqueIdentifier>{73fd49c8-e9e3-41bb-8862-d19de7374662}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PostEffect\OutlineEmphasis">
+      <UniqueIdentifier>{6a95de0a-bcd4-43d8-9d1f-d31512da7036}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PostEffects.cpp">
@@ -212,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OutlineEmphasis.cpp">
+      <Filter>PostEffect\OutlineEmphasis</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -389,6 +395,9 @@
     <ClInclude Include="src\Camera.h">
       <Filter>GameSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\OutlineEmphasis.h">
+      <Filter>PostEffect\OutlineEmphasis</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL\BoneCalculation.hlsl">
@@ -452,6 +461,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="HLSL\WaveSimulation.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\OutlineEmphasis.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

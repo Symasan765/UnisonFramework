@@ -30,10 +30,7 @@ INPUT_RAW_DATA VS(
     {
          //ボーンを適用したローカル座標に更新する
         Skin skinPos = SkinVert(Pos, Normal, Bones, Weights);
-		float4 buf = Pos;
         Pos = skinPos.Pos;
-		if(Pos.w == 0.0f)
-			Pos.w = 1.0f;
         Normal = skinPos.Normal;
     }
 

@@ -28,6 +28,7 @@ cSceneManager::cSceneManager()
 	m_SSSSS = new cScreenSpaceSSS;
 	m_CrossFilter = new cCrossFilter;
 	m_SMAA = new cFXAA;
+	m_OutlineEmphasis = new cOutlineEmphasis;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	if (FAILED(D3DX11CreateShaderResourceViewFromFileA(GetDirectX::Device(), "asset/Texture/Debug/CPURateBar.png", NULL, NULL, &m_pCPURateBar, NULL))) {
@@ -52,6 +53,7 @@ cSceneManager::~cSceneManager()
 	delete m_SSSSS;
 	delete m_CrossFilter;
 	delete m_SMAA;
+	delete m_OutlineEmphasis;
 }
 
 /// <summary>
@@ -108,21 +110,20 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 
 	GBuffer GraphicBuffer = cDeferredRendering::GetInstance().GetGraphicBuffer();
 
+	//肌部分にSSSSSを適用する
 	m_SSSSS->DrawSSS(GraphicBuffer.vSSSSS, GraphicBuffer.vNormal, GraphicBuffer.vDiffuse);
 
-	m_SMAA->DrawFXAA(m_SSSSS->GetResourceView());
+	//輪郭線を強調する
+	m_OutlineEmphasis->DrawOutLine(m_SSSSS->GetResourceView(), GraphicBuffer.vNormal);
+
+	//アンチエイリアス処理を行う
+	m_SMAA->DrawFXAA(m_OutlineEmphasis->GetResourceView());
 
 	m_pSceneData[0]->SetRendBuffer();
 	m_pSceneData[0]->SetBlendState(BrendStateNo::NONE);
-	static int time = 0;
-	if (time > 240) {
-		cSprite2DDraw::GetInstance().Draw(m_SMAA->GetResourceView(), { 0.0f,0.0f }, { 1280.0f,720.0f });
-		cFontDraw::getInstance()->TextDraw("AAあり", 0, 0);
-	}
-	else
-		cSprite2DDraw::GetInstance().Draw(m_SSSSS->GetResourceView(), { 0.0f,0.0f }, { 1280.0f,720.0f });
-	time++;
-	time %= 480;
+
+	//画面へレンダリングする
+	cSprite2DDraw::GetInstance().Draw(m_SMAA->GetResourceView(), { 0.0f,0.0f }, { 1280.0f,720.0f });
 
 	//=======================デバッグ情報の描画=================================
 #if defined(DEBUG) || defined(_DEBUG)
