@@ -56,6 +56,7 @@ public:
 	void SetRasterizerState(CullMode mode = CullMode::NONE);
 	void SetRendBuffer();
 	void SetRadialBlur(DirectX::XMFLOAT3 _Pos, float _Delta, int _Num);
+	void SetDepthStencilState();
 	bool IsRadialBlur();
 	RadialBlurData GetRadialBlur(const DirectX::XMFLOAT4X4& _VP);
 	const FogData& GetFogData() { return m_Fog; };

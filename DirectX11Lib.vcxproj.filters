@@ -219,6 +219,9 @@
     <ClCompile Include="src\OutlineEmphasis.cpp">
       <Filter>PostEffect\OutlineEmphasis</Filter>
     </ClCompile>
+    <ClCompile Include="src\SkyDome.cpp">
+      <Filter>GameSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\PostEffects.h">
@@ -398,6 +401,9 @@
     <ClInclude Include="src\OutlineEmphasis.h">
       <Filter>PostEffect\OutlineEmphasis</Filter>
     </ClInclude>
+    <ClInclude Include="src\SkyDome.h">
+      <Filter>GameSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL\BoneCalculation.hlsl">
@@ -464,6 +470,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="HLSL\OutlineEmphasis.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\DeferredSkyDraw.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

@@ -29,6 +29,7 @@ cSceneManager::cSceneManager()
 	m_CrossFilter = new cCrossFilter;
 	m_FXAA = new cFXAA;
 	m_OutlineEmphasis = new cOutlineEmphasis;
+	m_SkyDome = new cSkyDome;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	if (FAILED(D3DX11CreateShaderResourceViewFromFileA(GetDirectX::Device(), "asset/Texture/Debug/CPURateBar.png", NULL, NULL, &m_pCPURateBar, NULL))) {
@@ -54,6 +55,7 @@ cSceneManager::~cSceneManager()
 	delete m_CrossFilter;
 	delete m_FXAA;
 	delete m_OutlineEmphasis;
+	delete m_SkyDome;
 }
 
 /// <summary>
@@ -94,7 +96,7 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 
 	RenderingShadowMap();
 
-	DeferredRenderingPass();
+	DeferredRenderingPass(_FreeCameraFlag);
 
 	GBuffer GraphicBuffer = cDeferredRendering::GetInstance().GetGraphicBuffer();
 
@@ -136,11 +138,19 @@ void cSceneManager::RenderingShadowMap()
 	m_pSceneData[0]->MeshDraw();			//シャドウ用の深度マップが作られる
 }
 
-void cSceneManager::DeferredRenderingPass()
+void cSceneManager::DeferredRenderingPass(bool _FreeCameraFlag)
 {
 	//G-Bufferを作成する
 	cDeferredModel::DefaultRenderFlag(true);
+	//レンダーターゲットをG-Bufferに切り替える
 	cDeferredRendering::GetInstance().SetDeferredRendering(cShadowMap::GetInstance().GetDepthResourceView());		//シャドウマップ作成のため深度マップを渡す
+
+	//スカイドーム描画
+	m_SkyDome->DrawSkyDome(m_pSceneData[0]->m_CameraData.GetCameraData(_FreeCameraFlag));
+
+	//この段階でスカイドーム用シェーダに変わっているので改めて切り替える
+	cDeferredRendering::GetInstance().SetDeferredShader();
+	m_pSceneData[0]->SetDepthStencilState();		//スカイドームの中でZテストをOFFにしていたのでONにしなおす
 	m_pSceneData[0]->MeshDraw();		//ここでG-Bufferが完成する
 }
 

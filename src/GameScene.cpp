@@ -116,6 +116,12 @@ void cGameScene::SetRadialBlur(DirectX::XMFLOAT3 _Pos, float _Delta, int _Num)
 	m_Blur.RadialBlurFlag = true;		//次描画せよ
 }
 
+void cGameScene::SetDepthStencilState()
+{
+	// OMに深度/ステンシル・ステート・オブジェクトを設定
+	GetDirectX::Context()->OMSetDepthStencilState(m_DirectXData.v_pDepthStencilState, 0);
+}
+
 /// <summary>
 /// 現在,
 /// ラジアルブラーを照射するかどうか？

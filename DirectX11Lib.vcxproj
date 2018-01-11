@@ -197,6 +197,7 @@
     <ClCompile Include="src\ShaderMonitoring.cpp" />
     <ClCompile Include="src\ShaderStruct.cpp" />
     <ClCompile Include="src\ShadowMap.cpp" />
+    <ClCompile Include="src\SkyDome.cpp" />
     <ClCompile Include="src\SMAABlending.cpp" />
     <ClCompile Include="src\SMAABlendingWeight.cpp" />
     <ClCompile Include="src\SMAAEdge.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="src\ShaderMonitoring.h" />
     <ClInclude Include="src\ShaderStruct.h" />
     <ClInclude Include="src\ShadowMap.h" />
+    <ClInclude Include="src\SkyDome.h" />
     <ClInclude Include="src\SMAABlending.h" />
     <ClInclude Include="src\SMAABlendingWeight.h" />
     <ClInclude Include="src\SMAAEdge.h" />
@@ -274,6 +276,7 @@
     <FxCompile Include="HLSL\CrossFilter.hlsl" />
     <FxCompile Include="HLSL\Deferred1.hlsl" />
     <FxCompile Include="HLSL\DeferredBaseLighting.hlsl" />
+    <FxCompile Include="HLSL\DeferredSkyDraw.hlsl" />
     <FxCompile Include="HLSL\DepthOfField.hlsl" />
     <FxCompile Include="HLSL\FXAAShader.hlsl" />
     <FxCompile Include="HLSL\GaussBlur.hlsl" />

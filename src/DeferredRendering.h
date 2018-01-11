@@ -39,6 +39,7 @@ public:
 	void SetDeferredRendering(ID3D11ShaderResourceView* _DepthMap);
 	ID3D11ShaderResourceView* GetResourceView(int _no);
 	GBuffer GetGraphicBuffer();
+	void SetDeferredShader();
 private:
 	enum RenderName {
 		DIFFUSE = 0,		//ƒJƒ‰[(Æ–¾ŒvZÏ)
