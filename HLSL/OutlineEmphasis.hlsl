@@ -103,7 +103,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     ToonEdge toonData;
     toonData.Color = g_colorTex.Sample(g_samLinear, input.Tex); //輪郭線でなければこの色を返す色
     toonData.Tex = input.Tex; //求めたいテクスチャ座標
-    toonData.offsetScall = 1.0f; //解像度で割る値。数値が大きいとそれだけ多くのテクセルをまたいで判定を行うので線が太くなる
+    toonData.offsetScall = 0.4f; //解像度で割る値。数値が大きいとそれだけ多くのテクセルをまたいで判定を行うので線が太くなる
     toonData.DepthRange = 0.01f; //輪郭線として取り扱うサイズ。線の太さではなく有効範囲の拡大
     toonData.normTex = g_NormalTex; //法線テクスチャ
     toonData.samp = g_samLinear; //サンプラー

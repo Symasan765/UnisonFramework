@@ -23,7 +23,7 @@ public:
 		POINT = 2
 	};
 	cPostEffects(std::string _fileName);
-	~cPostEffects();
+	virtual ~cPostEffects();
 	void SetTexSamplerState(const int slot, Sampler flag);
 	
 protected:

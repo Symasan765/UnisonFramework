@@ -39,7 +39,6 @@ void cDeferredRendering::SetDeferredRendering(ID3D11ShaderResourceView* _DepthMa
 	GetDirectX::Context()->VSSetSamplers(0, 1, &m_pSampleLinear);
 
 	GetDirectX::Context()->PSSetShaderResources(4, 1, &_DepthMap);
-	m_Shader->Set();
 }
 
 ID3D11ShaderResourceView * cDeferredRendering::GetResourceView(int _no)
@@ -59,6 +58,11 @@ GBuffer cDeferredRendering::GetGraphicBuffer()
 		GetResourceView(4),
 	};
 	return buf;
+}
+
+void cDeferredRendering::SetDeferredShader()
+{
+	m_Shader->Set();
 }
 
 /*

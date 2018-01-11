@@ -16,6 +16,7 @@
 //#include "SMAntialiasing.h"
 #include "FXAntialiasing.h"
 #include "OutlineEmphasis.h"
+#include "SkyDome.h"
 
 /// <summary>
 /// シーンを管理する。ゲームを通して一つでいいのでシングルトンとする
@@ -63,7 +64,7 @@ private:
 	void Draw(bool _DebugFlag,bool _FreeCameraFlag,bool _GBufferDrawFlag);
 	void RenderingStandby(bool _FreeCameraFlag);
 	void RenderingShadowMap();
-	void DeferredRenderingPass();
+	void DeferredRenderingPass(bool _FreeCameraFlag);
 	ID3D11ShaderResourceView* PostEffectPath(GBuffer& GraphicBuffer);
 	void BackBufferRendering(ID3D11ShaderResourceView* LastData);
 	//===================
@@ -92,10 +93,13 @@ private:
 	ID3D11DepthStencilView* m_pDepthStencilView;		//深度ステンシルビュー
 
 	//=====エフェクト========
+	cSkyDome* m_SkyDome;	//スカイドーム描画に利用する
 	cScreenSpaceSSS* m_SSSSS;
 	cCrossFilter* m_CrossFilter;
 	cFXAA* m_FXAA;
 	cOutlineEmphasis* m_OutlineEmphasis;
+
+
 	//=====処理時間計測=====
 	cTimeCheck m_TimeUpdate;				//ゲームアップデートの処理時間計測を行う
 	cTimeCheck m_TimeDraw;					//描画の処理時間計測を行う
