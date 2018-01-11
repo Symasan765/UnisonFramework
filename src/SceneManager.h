@@ -59,7 +59,14 @@ public:
 private:
 	//各種更新処理
 	void Update();
+	//====== 描画系関数=====
 	void Draw(bool _DebugFlag,bool _FreeCameraFlag,bool _GBufferDrawFlag);
+	void RenderingStandby(bool _FreeCameraFlag);
+	void RenderingShadowMap();
+	void DeferredRenderingPass();
+	ID3D11ShaderResourceView* PostEffectPath(GBuffer& GraphicBuffer);
+	void BackBufferRendering(ID3D11ShaderResourceView* LastData);
+	//===================
 	void DrawStart();
 	void DrawEnd();
 	void PopCheck();
@@ -87,7 +94,7 @@ private:
 	//=====エフェクト========
 	cScreenSpaceSSS* m_SSSSS;
 	cCrossFilter* m_CrossFilter;
-	cFXAA* m_SMAA;
+	cFXAA* m_FXAA;
 	cOutlineEmphasis* m_OutlineEmphasis;
 	//=====処理時間計測=====
 	cTimeCheck m_TimeUpdate;				//ゲームアップデートの処理時間計測を行う

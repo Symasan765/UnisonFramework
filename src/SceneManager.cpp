@@ -27,7 +27,7 @@ cSceneManager::cSceneManager()
 	m_pDefaultRnedTex->RTCreate((float)WINDOW_SIZE_X, (float)WINDOW_SIZE_Y, { 0,0,0 });
 	m_SSSSS = new cScreenSpaceSSS;
 	m_CrossFilter = new cCrossFilter;
-	m_SMAA = new cFXAA;
+	m_FXAA = new cFXAA;
 	m_OutlineEmphasis = new cOutlineEmphasis;
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -52,7 +52,7 @@ cSceneManager::~cSceneManager()
 	m_pDefaultRnedTex = nullptr;
 	delete m_SSSSS;
 	delete m_CrossFilter;
-	delete m_SMAA;
+	delete m_FXAA;
 	delete m_OutlineEmphasis;
 }
 
@@ -90,40 +90,17 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 
 	DrawStart();		//描画スタート。ここで画面クリアされる=============================
 
-	//まずはカメラのプロジェクションを行う。プロジェクションのデータをもらっておく
-	const ViewProj& ViewPorjData = m_pSceneData[0]->m_CameraData.Projection(_FreeCameraFlag);
-	cDeferredConst::SetCameraData(m_pSceneData[0]->m_CameraData.GetCameraData(_FreeCameraFlag), ViewPorjData);
-	cDeferredConst::SetLightData(m_pSceneData[0]->m_DirectionalLight.GetLightPos());
-	m_pSceneData[0]->SetDefaultRender();		//標準的なレンダリング設定をONにする
-	m_pSceneData[0]->m_DirectionalLight.SetConstantBuffer(3);
-	m_pSceneData[0]->m_CameraData.SetConstBuffer(4, _FreeCameraFlag);
+	RenderingStandby(_FreeCameraFlag);
 
-	//深度マップを作成する
-	cDeferredModel::DefaultRenderFlag(false);
-	cShadowMap::GetInstance().SetRender();
-	m_pSceneData[0]->MeshDraw();			//シャドウ用の深度マップが作られる
+	RenderingShadowMap();
 
-	//G-Bufferを作成する
-	cDeferredModel::DefaultRenderFlag(true);
-	cDeferredRendering::GetInstance().SetDeferredRendering(cShadowMap::GetInstance().GetDepthResourceView());		//シャドウマップ作成のため深度マップを渡す
-	m_pSceneData[0]->MeshDraw();		//ここでG-Bufferが完成する
+	DeferredRenderingPass();
 
 	GBuffer GraphicBuffer = cDeferredRendering::GetInstance().GetGraphicBuffer();
 
-	//肌部分にSSSSSを適用する
-	m_SSSSS->DrawSSS(GraphicBuffer.vSSSSS, GraphicBuffer.vNormal, GraphicBuffer.vDiffuse);
+	ID3D11ShaderResourceView * LastData = PostEffectPath(GraphicBuffer);
 
-	//輪郭線を強調する
-	m_OutlineEmphasis->DrawOutLine(m_SSSSS->GetResourceView(), GraphicBuffer.vNormal);
-
-	//アンチエイリアス処理を行う
-	m_SMAA->DrawFXAA(m_OutlineEmphasis->GetResourceView());
-
-	m_pSceneData[0]->SetRendBuffer();
-	m_pSceneData[0]->SetBlendState(BrendStateNo::NONE);
-
-	//画面へレンダリングする
-	cSprite2DDraw::GetInstance().Draw(m_SMAA->GetResourceView(), { 0.0f,0.0f }, { 1280.0f,720.0f });
+	BackBufferRendering(LastData);
 
 	//=======================デバッグ情報の描画=================================
 #if defined(DEBUG) || defined(_DEBUG)
@@ -138,6 +115,57 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 #endif
 
 	DrawEnd();			//描画終了。ここで画面が切り替わる================================
+}
+
+void cSceneManager::RenderingStandby(bool _FreeCameraFlag)
+{
+	//まずはカメラのプロジェクションを行う。プロジェクションのデータをもらっておく
+	const ViewProj& ViewPorjData = m_pSceneData[0]->m_CameraData.Projection(_FreeCameraFlag);
+	cDeferredConst::SetCameraData(m_pSceneData[0]->m_CameraData.GetCameraData(_FreeCameraFlag), ViewPorjData);
+	cDeferredConst::SetLightData(m_pSceneData[0]->m_DirectionalLight.GetLightPos());
+	m_pSceneData[0]->SetDefaultRender();		//標準的なレンダリング設定をONにする
+	m_pSceneData[0]->m_DirectionalLight.SetConstantBuffer(3);
+	m_pSceneData[0]->m_CameraData.SetConstBuffer(4, _FreeCameraFlag);
+}
+
+void cSceneManager::RenderingShadowMap()
+{
+	//深度マップを作成する
+	cDeferredModel::DefaultRenderFlag(false);
+	cShadowMap::GetInstance().SetRender();
+	m_pSceneData[0]->MeshDraw();			//シャドウ用の深度マップが作られる
+}
+
+void cSceneManager::DeferredRenderingPass()
+{
+	//G-Bufferを作成する
+	cDeferredModel::DefaultRenderFlag(true);
+	cDeferredRendering::GetInstance().SetDeferredRendering(cShadowMap::GetInstance().GetDepthResourceView());		//シャドウマップ作成のため深度マップを渡す
+	m_pSceneData[0]->MeshDraw();		//ここでG-Bufferが完成する
+}
+
+ID3D11ShaderResourceView * cSceneManager::PostEffectPath(GBuffer& GraphicBuffer)
+{
+	//肌部分にSSSSSを適用する
+	m_SSSSS->DrawSSS(GraphicBuffer.vSSSSS, GraphicBuffer.vNormal, GraphicBuffer.vDiffuse);
+
+	//輪郭線を強調する
+	m_OutlineEmphasis->DrawOutLine(m_SSSSS->GetResourceView(), GraphicBuffer.vNormal);
+
+	//アンチエイリアス処理を行う
+	m_FXAA->DrawFXAA(m_OutlineEmphasis->GetResourceView());
+
+	//今後ポストエフェクトの最終パスが変わればここで返却するテクスチャを変更する
+	return m_FXAA->GetResourceView();
+}
+
+void cSceneManager::BackBufferRendering(ID3D11ShaderResourceView * LastData)
+{
+	m_pSceneData[0]->SetRendBuffer();
+	m_pSceneData[0]->SetBlendState(BrendStateNo::NONE);
+
+	//画面へレンダリングする
+	cSprite2DDraw::GetInstance().Draw(LastData, { 0.0f,0.0f }, { (float)WINDOW_SIZE_X,(float)WINDOW_SIZE_Y });
 }
 
 void cSceneManager::DrawStart() {

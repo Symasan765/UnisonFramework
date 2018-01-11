@@ -61,7 +61,7 @@ const ViewProj& cCamera::Projection(bool _FreeCameraFlag)
 
 	View = DirectX::XMMatrixLookAtLH(eyePosition, focusPosition, upDirection);
 	Proj = DirectX::XMMatrixPerspectiveFovLH(
-		DirectX::XMConvertToRadians(25.0f),		// Ž‹–ìŠp
+		DirectX::XMConvertToRadians(45.0f),		// Ž‹–ìŠp
 		(float)WINDOW_SIZE_X / (float)WINDOW_SIZE_Y,	// ƒAƒXƒyƒNƒg”ä
 		Near,							// ‘O•û“Š‰e–Ê‚Ü‚Å‚Ì‹——£
 		Far);							// Œã•û“Š‰e–Ê‚Ü‚Å‚Ì‹——£
