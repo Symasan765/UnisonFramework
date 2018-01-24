@@ -76,6 +76,15 @@
     <Filter Include="PostEffect\OutlineEmphasis">
       <UniqueIdentifier>{6a95de0a-bcd4-43d8-9d1f-d31512da7036}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{592ee6b0-32f2-45b8-96a6-44032f35ca8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeferredRendering\Demo">
+      <UniqueIdentifier>{4e9ce38a-2071-44bb-bb8e-aaa00858e982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect\HighlightBloom">
+      <UniqueIdentifier>{5a7aec29-2af5-43d7-9f93-eaa6bd8c300f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PostEffects.cpp">
@@ -221,6 +230,21 @@
     </ClCompile>
     <ClCompile Include="src\SkyDome.cpp">
       <Filter>GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BackGroundModel.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeferredDemo.cpp">
+      <Filter>DeferredRendering\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HighlightBloom.cpp">
+      <Filter>PostEffect\HighlightBloom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GaussianFilter.cpp">
+      <Filter>PostEffect\GaussBlur</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -404,6 +428,21 @@
     <ClInclude Include="src\SkyDome.h">
       <Filter>GameSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BackGroundModel.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeferredDemo.h">
+      <Filter>DeferredRendering\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HighlightBloom.h">
+      <Filter>PostEffect\HighlightBloom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GaussianFilter.h">
+      <Filter>PostEffect\GaussBlur</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL\BoneCalculation.hlsl">
@@ -473,6 +512,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="HLSL\DeferredSkyDraw.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\DeferredDemo.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

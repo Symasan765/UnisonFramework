@@ -29,8 +29,11 @@ public:
 	void LoadTessellation(std::string _FileName);
 	const Mesh3D& GetMeshData()const;
 	static void DefaultRenderFlag(bool flag);	//true : 通常レンダリング false : シャドウレンダリング
+	void AddFunctionToLua(lua_State* L, std::string LuaVarName);
 private:
 	void SetConstant();		//保存されたデータを定数バッファに設定する
+
+	static int DrawGlue(lua_State* L);
 	std::shared_ptr<Mesh3D> m_pMesh;
 	std::shared_ptr<TessellationStruct> m_pTesse;
 	cDeferredConst m_Constant;		//定数バッファ

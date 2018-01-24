@@ -6,6 +6,8 @@
 //							HAL大阪 : 松本 雄之介
 =================================================*/
 #include "DeferredBaseModel.h"
+#include "LuaConvert.h"
+using namespace LuaConv;
 
 bool cDeferredModel::m_DefaultRenderFlag = false;
 
@@ -116,10 +118,41 @@ void cDeferredModel::DefaultRenderFlag(bool flag)
 	m_DefaultRenderFlag = flag;
 }
 
+void cDeferredModel::AddFunctionToLua(lua_State * L, std::string LuaVarName)
+{
+	const luaL_Reg funcs[] = {
+		{ "Scaling", cMatrix::ScalingGlue },
+		{ "Translation", cMatrix::TranslationGlue },
+		{ "Rotation", cMatrix::RotationGlue },
+		{ "SetScaling", cMatrix::SetScalingGlue },
+		{ "SetRotate", cMatrix::SetRotateGlue },
+		{ "SetTrans", cMatrix::SetTransGlue },
+		{ "VectMove", cMatrix::VectMoveGlue },
+		{ "GetPosition", cMatrix::GetPositionGlue },
+		{ "Draw", cDeferredModel::DrawGlue },
+		{ NULL, NULL }
+	};
+
+	SetLuaGlobalObjct<cDeferredModel>(L, LuaVarName.c_str(), funcs, this);
+}
+
 void cDeferredModel::SetConstant()
 {
 	//ワールド行列を保存
 	m_Constant.SetWorldMatrix(GetWorldMatrix());
 	m_Constant.SetShaderType(m_ShaderType);
 	m_Constant.SetShader();
+}
+
+int cDeferredModel::DrawGlue(lua_State * L)
+{
+	//テーブルからアドレスを持ってくる
+	auto p = toPointer<cDeferredModel>(L);
+
+
+	//関数実行
+	p->DrawMesh();
+	lua_settop(L, 0);	//関数呼び出し用スタックは戻り値では戻り値以外は削除して問題ない
+
+	return 0;		//戻り値
 }

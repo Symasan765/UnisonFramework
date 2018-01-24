@@ -262,9 +262,30 @@ void cFbxLoad::GetMeshData(FbxMesh* pFbxMesh, Mesh3D* meshdata) {
 			_splitpath(tName, 0, 0, tName, ext);
 			strcat_s(tName, ext);*/
 
-			std::string texName = meshdata->dir + tName;
-			//テクスチャーを作成
+			//std::string texName = meshdata->dir + tName;
+			////テクスチャーを作成
+			//// TODO トゥーン用シェーダ読み込みシステムを導入する
+			//meshdata->vpMaterial[i].pDefaultTex = cTexManager::GetInstance().LoadTexData(texName, true);
+
+			std::string ToonFolder[4] = {
+				{ "Default/" },
+				{ "Light/" },
+				{ "Shadow/" },
+				{ "Mask/" }
+			};
+
+			//トゥーン用テクスチャをそれぞれ読み込む
+			std::string texName = meshdata->dir + ToonFolder[0] + tName;
 			meshdata->vpMaterial[i].pDefaultTex = cTexManager::GetInstance().LoadTexData(texName, true);
+
+			texName = meshdata->dir + ToonFolder[1] + tName;
+			meshdata->vpMaterial[i].pLightTex = cTexManager::GetInstance().LoadTexData(texName, true);
+
+			texName = meshdata->dir + ToonFolder[2] + tName;
+			meshdata->vpMaterial[i].pShadowTex = cTexManager::GetInstance().LoadTexData(texName, true);
+
+			texName = meshdata->dir + ToonFolder[3] + tName;
+			meshdata->vpMaterial[i].pMaterialMaskTex = cTexManager::GetInstance().LoadTexData(texName, true);
 		}
 		//マテリアルの数だけインデックスバッファーを作成
 		int iCount = 0;

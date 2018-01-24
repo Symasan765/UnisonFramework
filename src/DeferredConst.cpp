@@ -99,8 +99,8 @@ void cDeferredConst::SetCameraData(const CameraData& _cameraData, ViewProj _vp)
 	ProjBuf._33 = _33;
 	ProjBuf._43 = _43;
 	m_DepthProj = ProjBuf;
-	m_Near = SHADOW_MAP_NEAR;
-	m_Far = SHADOW_MAP_FAR;
+	m_Near = _cameraData.vNear;
+	m_Far = _cameraData.vFar;
 }
 
 void cDeferredConst::SetLightData(const DirectX::XMFLOAT3 & _light)

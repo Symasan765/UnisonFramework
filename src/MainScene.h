@@ -8,6 +8,9 @@
 #pragma once
 #include "GameScene.h"
 #include "DeferredBaseModel.h"
+#include "Player.h"
+#include "BackGroundModel.h"
+#include "Camera.h"
 
 class cMainScene : public cGameScene {
 public:
@@ -17,5 +20,7 @@ public:
 	void MeshDraw();
 	void UIDraw();
 private:
-	cDeferredModel* m_pModel;
+	cDeferredModel* m_pGround;
+	cPlayer* m_pPlayer;
+	cBacGroundModel* m_BackGround;
 };

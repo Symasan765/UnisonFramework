@@ -16,6 +16,7 @@
 class cPostEffects {
 public:
 	friend class cDirectX11;	//解放処理を行う
+	friend class cGaussianFilter;	// TODO 旧ガウスフィルタのみ暫定的に使えるようにしている。このクラスを継承するよう変更すれば不要
 
 	//テクスチャに適用するサンプラ。ビット演算に対応させる
 	enum Sampler {

@@ -9,35 +9,45 @@
 
 cMainScene::cMainScene()
 {
-	m_pModel = new cDeferredModel;
-	m_pModel->LoadData("Link.x", 1);
-	m_DirectionalLight.SetLightPos(DirectX::XMFLOAT4{ 1.0f,0.0f,0.0f,1.0f });
-	m_pModel->Rotation(-90.0f, 0.0, 0.0f);
-	//m_pModel->Scaling(50.0f);
-	
-	/*m_CameraData.SetPosition({ 0.0f,10.0f,-80.0f });
-	m_CameraData.SetLookPoint({ 0.0f,10.0f,0.0f });
-	m_CameraData.SetNear(1.0f, 10000.0f);*/
+	m_pGround = new cDeferredModel;
+	m_pGround->LoadData("Ground.x", 1);
+	//m_pGround->SetScaling(0.01f);
+	m_DirectionalLight.SetLightPos(DirectX::XMFLOAT4{ 1.0f,-1.0f,0.0f,1.0f });
 
-	m_CameraData.SetPosition({ 0.0f,0.2f,-2.0f });
-	m_CameraData.SetLookPoint({ 0.0f,0.2f,0.0f });
+	m_pPlayer = new cPlayer;
+
+	m_BackGround = new cBacGroundModel;
+
+	m_CameraData.SetPosition({ -14.0f,1.19f,8.07f });
+	m_CameraData.SetLookPoint({ -14.79f,1.16f,7.37f });
+/*
+	m_CameraData.SetPosition({ 0.0f,1.0f,0.0f });
+	m_CameraData.SetUpVect({ 0.0f,0.0f,1.0f });
+	m_CameraData.SetLookPoint({ 0.0f,0,0 });*/
 }
 
 cMainScene::~cMainScene()
 {
-	delete m_pModel;
+	delete m_pGround;
+	delete m_pPlayer;
 }
 
 void cMainScene::Update()
 {
-	//m_pModel->Rotation(0.0f, 1.0f, 0.0f);
+	m_pPlayer->SetCameraData(m_CameraData.GetViewProj(false));
+	m_pPlayer->Update();
+	m_BackGround->Update();
+
+	DirectX::XMFLOAT3 pPos = m_pPlayer->GetPosition();
+	m_CameraData.SetPosition({ pPos.x,pPos.y + 3.0f,pPos.z + 5.0f });
+	m_CameraData.SetLookPoint({ pPos.x,pPos.y + 1.0f,pPos.z });
 }
 
 void cMainScene::MeshDraw()
 {
-	static int a = 0;
-	m_pModel->DrawMesh(0,a);
-	a++;
+	m_pGround->DrawMesh();
+	m_pPlayer->Draw();
+	m_BackGround->Draw();
 }
 
 void cMainScene::UIDraw()

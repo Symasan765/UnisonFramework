@@ -46,8 +46,8 @@ public:
 	DirectX::XMFLOAT3 GetAxisY()const;
 	DirectX::XMFLOAT3 GetAxisZ()const;
 
-	void AddFunctionToLua(lua_State* L, std::string LuaVarName = "transform");
-private:
+	virtual void AddFunctionToLua(lua_State* L, std::string LuaVarName = "transform");
+protected:
 	DirectX::XMFLOAT3 m_ScaleRate;		//Œ»İ‚ÌŠgk—¦‚ğ•Û
 	MATRIX3D mtxDate;	//\‘¢‘ÌŒQ
 

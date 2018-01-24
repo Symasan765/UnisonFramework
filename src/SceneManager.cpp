@@ -13,10 +13,15 @@
 #include "SpriteDraw.h"
 #include "MemoryMonitor.h"
 #include "DeferredBaseModel.h"
+#include "HighlightBloom.h"
+
+#include "DeferredDemo.h"
+
 
 cSceneManager::cSceneManager()
 {
 	//変数の初期化処理
+	cDeferredRendering::GetInstance();
 	m_pOldScene = nullptr;
 	m_pSwapChain = nullptr;
 	m_pImmediateContext = nullptr;
@@ -92,22 +97,51 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 
 	DrawStart();		//描画スタート。ここで画面クリアされる=============================
 
+	//デモ用にハーフランバートとトゥーンを切り替える
+	static int timeCnt = 0;
+	timeCnt = 480;
+
 	RenderingStandby(_FreeCameraFlag);
+	if (timeCnt > 240) {
+		RenderingShadowMap();
 
-	RenderingShadowMap();
+		DeferredRenderingPass(_FreeCameraFlag);
 
-	DeferredRenderingPass(_FreeCameraFlag);
+		GBuffer GraphicBuffer = cDeferredRendering::GetInstance().GetGraphicBuffer();
 
-	GBuffer GraphicBuffer = cDeferredRendering::GetInstance().GetGraphicBuffer();
+		ID3D11ShaderResourceView * LastData = PostEffectPath(GraphicBuffer);
 
-	ID3D11ShaderResourceView * LastData = PostEffectPath(GraphicBuffer);
+		BackBufferRendering(LastData);
+		cFontDraw::getInstance()->TextDraw("トゥーンレンダリング", 10, 10, FontName::Mplus, 1.0f, { 0.0f,0.0f,0.0f });
+	}
+	else {
+		// TODO ここはデモ用なので消してもいい
+		//G-Bufferを作成する
+		cDeferredModel::DefaultRenderFlag(true);
+		//レンダーターゲットをG-Bufferに切り替える
+		cDeferredDemo::GetInstance().SetDeferredRendering(cShadowMap::GetInstance().GetDepthResourceView());		//シャドウマップ作成のため深度マップを渡す
+																													//スカイドーム描画
+		m_SkyDome->DrawSkyDome(m_pSceneData[0]->m_CameraData.GetCameraData(_FreeCameraFlag));
 
-	BackBufferRendering(LastData);
+		//この段階でスカイドーム用シェーダに変わっているので改めて切り替える
+		cDeferredDemo::GetInstance().SetDeferredShader();
+		m_pSceneData[0]->SetDepthStencilState();		//スカイドームの中でZテストをOFFにしていたのでONにしなおす
+		m_pSceneData[0]->MeshDraw();		//ここでG-Bufferが完成する
+		m_pSceneData[0]->SetRendBuffer();
+		m_pSceneData[0]->SetBlendState(BrendStateNo::NONE);
+
+		//画面へレンダリングする
+		cSprite2DDraw::GetInstance().Draw(cDeferredDemo::GetInstance().GetGraphicBuffer().vDiffuse, { 0.0f,0.0f }, { (float)WINDOW_SIZE_X,(float)WINDOW_SIZE_Y });
+		cFontDraw::getInstance()->TextDraw("ハーフランバート", 10, 10, FontName::Mplus, 1.0f, { 0.0f,0.0f,0.0f });
+	}
+
+	//timeCnt++;
+	timeCnt %= 480;
 
 	//=======================デバッグ情報の描画=================================
-#if defined(DEBUG) || defined(_DEBUG)
 	m_pSceneData[0]->SetRendBuffer();		//標準的なレンダリング設定をONにする
 	cFontDraw::getInstance()->Draw();		//ゲームシーン中に設定された文字をまとめて描画する(2017/)
+#if defined(DEBUG) || defined(_DEBUG)
 	if (_DebugFlag)
 		ProcessRateDraw();
 	if (_GBufferDrawFlag)
@@ -156,6 +190,9 @@ void cSceneManager::DeferredRenderingPass(bool _FreeCameraFlag)
 
 ID3D11ShaderResourceView * cSceneManager::PostEffectPath(GBuffer& GraphicBuffer)
 {
+	// 高輝度部にブラーをかけておく
+	cHighlightBloom::GetInstance().DrawBloom(GraphicBuffer.vHighBrightness);
+
 	//肌部分にSSSSSを適用する
 	m_SSSSS->DrawSSS(GraphicBuffer.vSSSSS, GraphicBuffer.vNormal, GraphicBuffer.vDiffuse);
 
@@ -176,6 +213,13 @@ void cSceneManager::BackBufferRendering(ID3D11ShaderResourceView * LastData)
 
 	//画面へレンダリングする
 	cSprite2DDraw::GetInstance().Draw(LastData, { 0.0f,0.0f }, { (float)WINDOW_SIZE_X,(float)WINDOW_SIZE_Y });
+
+
+	//画面へレンダリングする(ライトブルーム)
+	m_FXAA->DrawFXAA(cHighlightBloom::GetInstance().GetBloomResourceView());
+	m_pSceneData[0]->SetRendBuffer();
+	m_pSceneData[0]->SetBlendState(BrendStateNo::ADD);
+	cSprite2DDraw::GetInstance().Draw(m_FXAA->GetResourceView(), { 0.0f,0.0f }, { (float)WINDOW_SIZE_X,(float)WINDOW_SIZE_Y });
 }
 
 void cSceneManager::DrawStart() {

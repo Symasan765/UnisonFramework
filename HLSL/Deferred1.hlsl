@@ -103,6 +103,17 @@ float4 CookTorrance(float3 normal,float3 wPos,float3 Eye){
     return ks * max(0, F * D * G / NV); // 鏡面反射光
 }
 
+//指数フォグ
+float4 ExpFog(float4 diffuse, float depth, float density, float4 fogColor)
+{
+    float d = depth; //距離
+    float e = 2.71828;
+    float f = pow(e, -d * density); //フォグファクター
+    f = saturate(f);
+    float4 C = f * diffuse + (1 - f) * fogColor;
+    return C;
+}
+
 //ピクセルシェーダ
 PS_OUTPUT PS(PS_INPUT In)
 {
@@ -110,7 +121,7 @@ PS_OUTPUT PS(PS_INPUT In)
 
     Out.vPosition = In.WorldPos;                   //座標
     Out.vNormal = normalize(In.Normal);                         //法線
-	Out.vNormal.w = In.Depth.z;
+	Out.vNormal.w = In.Pos.z / In.Pos.w;
 	Out.vScreenSpaceSSS = g_MaterialMaskTex.Sample(g_samLinear, In.UV).r;  //SSSSS
 
     //深度値の比較のためにテクスチャから情報取得
@@ -125,7 +136,7 @@ PS_OUTPUT PS(PS_INPUT In)
 
 	//金属面の処理
 	if(g_MaterialMaskTex.Sample(g_samLinear, In.UV).g >= 0.5f){
-		Out.vColor += CookTorrance(In.Normal.xyz,In.WorldPos.xyz,CameraPos.xyz);
+		Out.vColor += CookTorrance(Out.vNormal.xyz,In.WorldPos.xyz,CameraPos.xyz);
 		Out.vColor.w = 1.0f;
 		//高輝度部抽出
 		Out.vBright += Out.vColor;
@@ -135,13 +146,13 @@ PS_OUTPUT PS(PS_INPUT In)
 	}
 
 	//試しに照明計算をしてみる
-	float3 N = In.Normal.xyz;
+	float3 N = Out.vNormal.xyz;
 	float3 L = -LightDir.xyz;
 	float3 eye = normalize(CameraPos.xyz - In.WorldPos.xyz);
 	float3 H = normalize(L + eye);
 
 	//ランバートで照明
-	 float deif = dot(In.Normal.xyz, -LightDir.xyz);
+	 float deif = dot(N, -LightDir.xyz);
 	 deif = deif * 0.5f + 0.5;
 	 deif = deif * deif;
 
@@ -149,15 +160,24 @@ PS_OUTPUT PS(PS_INPUT In)
 	//float deif = max(0.0f,dot(In.Normal.xyz,-LightDir.xyz)) + pow(max(0,dot(N,H)),10);
 
 	// TODO 照明値をパラメータ化すること
-	if(deif >= 0.90f)
+	if(deif >= 0.90f){
 		Out.vColor = g_LightingHighTex.Sample(g_samLinear, In.UV);  //ハイライト
+		}
 	else if(deif >= 0.3f)
 		Out.vColor = g_tex.Sample(g_samLinear, In.UV);  //描画色
 	else
 		Out.vColor = g_LightingShadowTex.Sample(g_samLinear, In.UV);  //シャドウ部
 
+	Out.vBright = Out.vColor;
+	Out.vBright.xyz *= 0.3f;
+	Out.vBright.a *= deif;
+
 	//スクリーンスペースサブサーフェススキャッタリングのディフューズ情報を入れる。wにはマスクを入れたのでこれでSSSSS部のディフューズだけ取り出せる
 	Out.vScreenSpaceSSS.xyz = Out.vScreenSpaceSSS.w * Out.vColor.xyz;
+
+	 //In.LightUV /= In.LightUV.w;
+    //float TexValue = g_shadowTex.Sample(g_samLinear, In.LightUV).r;     //ライト位置から見た深度
+    //Out.vColor.xyz *= (TexValue + 0.0001f < In.LightDepth) ? 0.0f : 1.0f; //比較して代入
    
     return Out;
 }

@@ -161,12 +161,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\BackGroundModel.cpp" />
     <ClCompile Include="src\BillBoard.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\ComboBox.cpp" />
     <ClCompile Include="src\CrossFilter.cpp" />
     <ClCompile Include="src\DeferredBaseModel.cpp" />
     <ClCompile Include="src\DeferredConst.cpp" />
+    <ClCompile Include="src\DeferredDemo.cpp" />
     <ClCompile Include="src\DeferredRendering.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\DirectX11.cpp" />
@@ -175,6 +177,8 @@
     <ClCompile Include="src\FXAntialiasing.cpp" />
     <ClCompile Include="src\GameScene.cpp" />
     <ClCompile Include="src\GaussBlur.cpp" />
+    <ClCompile Include="src\GaussianFilter.cpp" />
+    <ClCompile Include="src\HighlightBloom.cpp" />
     <ClCompile Include="src\HitCheck.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\KDTree.cpp" />
@@ -188,6 +192,7 @@
     <ClCompile Include="src\Mesh3D.cpp" />
     <ClCompile Include="src\OrientedBoundingBox.cpp" />
     <ClCompile Include="src\OutlineEmphasis.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PostEffects.cpp" />
     <ClCompile Include="src\ProcessMonitor.cpp" />
     <ClCompile Include="src\RenderTarget.cpp" />
@@ -213,6 +218,7 @@
     <ClInclude Include="HLSL\FXAA.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AreaTex.h" />
+    <ClInclude Include="src\BackGroundModel.h" />
     <ClInclude Include="src\BillBoard.h" />
     <ClInclude Include="src\BoneStruct.h" />
     <ClInclude Include="src\Camera.h" />
@@ -222,6 +228,7 @@
     <ClInclude Include="src\CrossFilter.h" />
     <ClInclude Include="src\DeferredBaseModel.h" />
     <ClInclude Include="src\DeferredConst.h" />
+    <ClInclude Include="src\DeferredDemo.h" />
     <ClInclude Include="src\DeferredRendering.h" />
     <ClInclude Include="src\DirectionalLight.h" />
     <ClInclude Include="src\DirectX11.h" />
@@ -231,7 +238,9 @@
     <ClInclude Include="src\FXAntialiasing.h" />
     <ClInclude Include="src\GameScene.h" />
     <ClInclude Include="src\GaussBlur.h" />
+    <ClInclude Include="src\GaussianFilter.h" />
     <ClInclude Include="src\GBuffer.h" />
+    <ClInclude Include="src\HighlightBloom.h" />
     <ClInclude Include="src\HitCheck.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\KDTree.h" />
@@ -246,6 +255,7 @@
     <ClInclude Include="src\Mesh3D.h" />
     <ClInclude Include="src\OrientedBoundingBox.h" />
     <ClInclude Include="src\OutlineEmphasis.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\PostEffects.h" />
     <ClInclude Include="src\ProcessMonitor.h" />
     <ClInclude Include="src\RenderTarget.h" />
@@ -276,6 +286,7 @@
     <FxCompile Include="HLSL\CrossFilter.hlsl" />
     <FxCompile Include="HLSL\Deferred1.hlsl" />
     <FxCompile Include="HLSL\DeferredBaseLighting.hlsl" />
+    <FxCompile Include="HLSL\DeferredDemo.hlsl" />
     <FxCompile Include="HLSL\DeferredSkyDraw.hlsl" />
     <FxCompile Include="HLSL\DepthOfField.hlsl" />
     <FxCompile Include="HLSL\FXAAShader.hlsl" />

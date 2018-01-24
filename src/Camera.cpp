@@ -18,7 +18,7 @@ using namespace DirectX;
 cCamera::cCamera()
 {
 	//ƒJƒƒ‰‚Ì‰Šú’l‚ğİ’è‚·‚é
-	SetCameraAllData({ {0.0f,10.0f,-15.0f},{0.0f,0.0f,0.0f},{0.0f,1.0f,0.0f},1.0f,100.0f });
+	SetCameraAllData({ {0.0f,10.0f,-15.0f},{0.0f,0.0f,0.0f},{0.0f,1.0f,0.0f},0.2f,200.0f });
 	m_ShaderConst.data = { m_CameraData.vPos.x,m_CameraData.vPos.y,m_CameraData.vPos.z,1.0f };
 }
 
@@ -398,6 +398,14 @@ CameraData cCamera::GetCameraData(bool _FreeCameraFlag)
 	else {
 		return m_DebugCameraData;
 	}
+}
+
+ViewProj cCamera::GetViewProj(bool _FreeCameraFlag)
+{
+	if (!_FreeCameraFlag) {
+		return m_CameraVP;
+	}
+		return m_DebugVP;
 }
 
 void cCamera::VectMove(const float rate)

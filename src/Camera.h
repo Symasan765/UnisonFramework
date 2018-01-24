@@ -47,6 +47,7 @@ public:
 
 	void SetConstBuffer(const int pass,bool debugFlag = false);
 	CameraData GetCameraData(bool _FreeCameraFlag);
+	ViewProj GetViewProj(bool _FreeCameraFlag);
 
 	void VectMove(const float rate);
 	void LookPointRotate(const float rotX, const float rotY, const float rotZ);
