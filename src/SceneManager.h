@@ -17,6 +17,7 @@
 #include "FXAntialiasing.h"
 #include "OutlineEmphasis.h"
 #include "SkyDome.h"
+#include "DepthOfField.h"
 
 /// <summary>
 /// シーンを管理する。ゲームを通して一つでいいのでシングルトンとする
@@ -98,6 +99,7 @@ private:
 	cCrossFilter* m_CrossFilter;
 	cFXAA* m_FXAA;
 	cOutlineEmphasis* m_OutlineEmphasis;
+	cDepthOfField* m_DepthOfField;
 
 
 	//=====処理時間計測=====

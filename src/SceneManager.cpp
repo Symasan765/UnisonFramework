@@ -16,6 +16,7 @@
 #include "HighlightBloom.h"
 
 #include "DeferredDemo.h"
+#include "Input.h"
 
 
 cSceneManager::cSceneManager()
@@ -35,6 +36,7 @@ cSceneManager::cSceneManager()
 	m_FXAA = new cFXAA;
 	m_OutlineEmphasis = new cOutlineEmphasis;
 	m_SkyDome = new cSkyDome;
+	m_DepthOfField = new cDepthOfField;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	if (FAILED(D3DX11CreateShaderResourceViewFromFileA(GetDirectX::Device(), "asset/Texture/Debug/CPURateBar.png", NULL, NULL, &m_pCPURateBar, NULL))) {
@@ -61,6 +63,7 @@ cSceneManager::~cSceneManager()
 	delete m_FXAA;
 	delete m_OutlineEmphasis;
 	delete m_SkyDome;
+	delete m_DepthOfField;
 }
 
 /// <summary>
@@ -76,6 +79,7 @@ void cSceneManager::Update() {
 	//まずは更新処理
 	m_pOldScene = m_pSceneData[0].get();		//更新処理中にシーン切り替えがある場合があるので現在のアドレスを保持する
 	m_pSceneData[0]->Update();						//更新する時はもっとも先頭のものだけを更新する
+	m_pSceneData[0]->m_ToonParam.ToonParamUpdate();	//トゥーン用のパラメータを取得
 
 #if defined(DEBUG) || defined(_DEBUG)
 	m_TimeUpdate.TimerEnd();			//時間計測終了
@@ -99,10 +103,12 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 
 	//デモ用にハーフランバートとトゥーンを切り替える
 	static int timeCnt = 0;
-	timeCnt = 480;
+	static bool flag = true;
+	if (GetKey->Trigger(DIK_RETURN))
+		flag = !flag;
 
 	RenderingStandby(_FreeCameraFlag);
-	if (timeCnt > 240) {
+	if (flag) {
 		RenderingShadowMap();
 
 		DeferredRenderingPass(_FreeCameraFlag);
@@ -112,7 +118,6 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 		ID3D11ShaderResourceView * LastData = PostEffectPath(GraphicBuffer);
 
 		BackBufferRendering(LastData);
-		cFontDraw::getInstance()->TextDraw("トゥーンレンダリング", 10, 10, FontName::Mplus, 1.0f, { 0.0f,0.0f,0.0f });
 	}
 	else {
 		// TODO ここはデモ用なので消してもいい
@@ -132,10 +137,9 @@ void cSceneManager::Draw(bool _DebugFlag, bool _FreeCameraFlag, bool _GBufferDra
 
 		//画面へレンダリングする
 		cSprite2DDraw::GetInstance().Draw(cDeferredDemo::GetInstance().GetGraphicBuffer().vDiffuse, { 0.0f,0.0f }, { (float)WINDOW_SIZE_X,(float)WINDOW_SIZE_Y });
-		cFontDraw::getInstance()->TextDraw("ハーフランバート", 10, 10, FontName::Mplus, 1.0f, { 0.0f,0.0f,0.0f });
 	}
 
-	//timeCnt++;
+	timeCnt++;
 	timeCnt %= 480;
 
 	//=======================デバッグ情報の描画=================================
@@ -179,6 +183,9 @@ void cSceneManager::DeferredRenderingPass(bool _FreeCameraFlag)
 	//レンダーターゲットをG-Bufferに切り替える
 	cDeferredRendering::GetInstance().SetDeferredRendering(cShadowMap::GetInstance().GetDepthResourceView());		//シャドウマップ作成のため深度マップを渡す
 
+	// トゥーン用ライティングパラメータをセット
+	m_pSceneData[0]->m_ToonParam.SetLightConstantBuffer(5);
+
 	//スカイドーム描画
 	m_SkyDome->DrawSkyDome(m_pSceneData[0]->m_CameraData.GetCameraData(_FreeCameraFlag));
 
@@ -197,10 +204,14 @@ ID3D11ShaderResourceView * cSceneManager::PostEffectPath(GBuffer& GraphicBuffer)
 	m_SSSSS->DrawSSS(GraphicBuffer.vSSSSS, GraphicBuffer.vNormal, GraphicBuffer.vDiffuse);
 
 	//輪郭線を強調する
+	// トゥーン用ライティングパラメータをセット
+	m_pSceneData[0]->m_ToonParam.SetOutLineConstantBuffer(1);
 	m_OutlineEmphasis->DrawOutLine(m_SSSSS->GetResourceView(), GraphicBuffer.vNormal);
 
+	m_DepthOfField->DrawDOF(m_OutlineEmphasis->GetResourceView(), GraphicBuffer.vNormal, m_pSceneData[0]->GetDoFData());
+
 	//アンチエイリアス処理を行う
-	m_FXAA->DrawFXAA(m_OutlineEmphasis->GetResourceView());
+	m_FXAA->DrawFXAA(m_DepthOfField->GetResourceView());
 
 	//今後ポストエフェクトの最終パスが変わればここで返却するテクスチャを変更する
 	return m_FXAA->GetResourceView();

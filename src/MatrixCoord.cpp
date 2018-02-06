@@ -37,6 +37,7 @@ void cMatrix::Scaling(const float _rateX, const float _rateY, const float _rateZ
 	XMMATRIX mat = XMLoadFloat4x4(&mtxDate.mtxWorld);
 	rot *= mat;
 	XMStoreFloat4x4(&mtxDate.mtxWorld, rot);
+	m_ScaleRate = { _rateX,_rateY,_rateZ };
 }
 
 void cMatrix::Translation(const DirectX::XMFLOAT3 _moveVec) {
@@ -136,6 +137,19 @@ void cMatrix::SetTrans(const DirectX::XMFLOAT3 pos) {
 void cMatrix::SetMatrix(const DirectX::XMFLOAT4X4 _m)
 {
 	mtxDate.mtxWorld = _m;
+}
+
+void cMatrix::SetRotateMatrix(const DirectX::XMFLOAT4X4 rotMat)
+{
+	XMFLOAT3 pos = { mtxDate.mtxWorld._41,mtxDate.mtxWorld._42,mtxDate.mtxWorld._43 };
+
+	mtxDate.mtxWorld = rotMat;
+
+	mtxDate.mtxWorld._41 = pos.x;
+	mtxDate.mtxWorld._42 = pos.y;
+	mtxDate.mtxWorld._43 = pos.z;
+
+	mtxDate.mtxWorld._44 = 1.0f;
 }
 
 void cMatrix::VectMove(const float _moveVec) {

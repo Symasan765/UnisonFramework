@@ -19,4 +19,6 @@ private:
 	cDeferredModel* m_SkyDome;		//スカイドームモデルを読み込む
 	std::shared_ptr<ShaderData> m_Shader;									//ディファードレンダリングシェーダを保持
 	ID3D11DepthStencilState* m_pDepthStencilState;
+
+	float m_RotAngle;
 };

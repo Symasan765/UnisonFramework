@@ -52,7 +52,7 @@ void GS(triangle INPUT_RAW_DATA input[3],
     for (int i = 0; i < 3; ++i)
     {
         output.Pos = mul(input[i].Pos, mWLP);
-        output.Depth = output.Pos.z;
+        output.Depth = output.Pos;
 		// o—Í
         TriStream.Append(output);
     }
@@ -61,5 +61,5 @@ void GS(triangle INPUT_RAW_DATA input[3],
 
 float4 PS(PS_SHADOW_INPUT In) : SV_Target
 {
-    return In.Depth;
+    return In.Depth.z / In.Depth.w;
 }

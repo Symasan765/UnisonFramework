@@ -20,10 +20,8 @@ cMainScene::cMainScene()
 
 	m_CameraData.SetPosition({ -14.0f,1.19f,8.07f });
 	m_CameraData.SetLookPoint({ -14.79f,1.16f,7.37f });
-/*
-	m_CameraData.SetPosition({ 0.0f,1.0f,0.0f });
-	m_CameraData.SetUpVect({ 0.0f,0.0f,1.0f });
-	m_CameraData.SetLookPoint({ 0.0f,0,0 });*/
+
+	m_CameraManager = new cCameraManager(m_pPlayer->GetPosition());
 }
 
 cMainScene::~cMainScene()
@@ -38,9 +36,12 @@ void cMainScene::Update()
 	m_pPlayer->Update();
 	m_BackGround->Update();
 
-	DirectX::XMFLOAT3 pPos = m_pPlayer->GetPosition();
-	m_CameraData.SetPosition({ pPos.x,pPos.y + 3.0f,pPos.z + 5.0f });
-	m_CameraData.SetLookPoint({ pPos.x,pPos.y + 1.0f,pPos.z });
+	m_CameraManager->SetPlayerPos(m_pPlayer->GetPosition());
+	m_CameraManager->Update();
+
+
+	//最後にカメラマネージャからカメラへ座標情報を渡す
+	m_CameraManager->PopCameraPos(&m_CameraData);
 }
 
 void cMainScene::MeshDraw()

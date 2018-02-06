@@ -7,12 +7,12 @@ cBacGroundModel::cBacGroundModel()
 	m_Models = new cDeferredModel[2];
 	m_LuaAct = new cLuaActor("GameObject/BackGroundModel.lua");
 	//===========
-	/*
-	m_Models->LoadData("CityData.x", 1);
+	
+	/*m_Models->LoadData("CityData.x", 1);
 	m_Models->SetScaling(0.001f);
 	m_Models->AddFunctionToLua(m_LuaAct->GetLuaState(), "City");
-	m_LuaAct->ScriptCommit();
-	*/
+	m_LuaAct->ScriptCommit();*/
+	
 	//==========
 
 	m_Models[1].LoadData("box.x", 0);

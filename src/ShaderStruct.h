@@ -98,3 +98,31 @@ struct WaveStruct {
 	float CYCLE;					//é¸ä˙
 	DirectX::XMFLOAT4 vWavePoint; //îgÇÃî≠ê∂åπ
 };
+
+struct ToonLightingStruct {
+	float LightBorder;
+	float ShadowBorder;
+	float HighlightSub;
+	float HighlightSum;
+
+	ToonLightingStruct() {
+		LightBorder = 0;
+		ShadowBorder = 0;
+		HighlightSub = 0;
+		HighlightSum = 0;
+	}
+};
+
+struct OutlineParam {
+	float offsetScall;
+	float DepthRange;
+	float NormalRange;
+	float OutlineSum;
+
+	OutlineParam() {
+		offsetScall = 0;
+		DepthRange = 0;
+		NormalRange = 0;
+		OutlineSum = 0;
+	}
+};

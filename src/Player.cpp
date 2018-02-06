@@ -1,17 +1,29 @@
 #include "Player.h"
 #include "Input.h"
 #include <algorithm>
+#include <math.h>
 using namespace DirectX;
 
 cPlayer::cPlayer()
 {
-	LoadData("Link.x", 1);
+	m_ConstScal = 0.025f;
+	LoadData("Player.x", 1);
 	m_anmCnt = 0;
+	SetScaling(m_ConstScal);
 	SetTrans({ -17.3f,0.0f,6.4f });
-	SetScaling(0.1f);
 
 	m_LuaScript = new cLuaActor("GameActor/PlayerMove.lua");
 	m_LuaScript->ScriptCommit();
+
+	m_MoveState = WAIT;
+
+	m_MaxDashSpeed = 0.0f;
+	m_MaxWalkSpeed = 0.0f;
+	m_Accele = 0.0f;
+	m_Decele = 0.0f;
+	m_NowSpeed = 0.0f;
+	m_NowVect = { 0.0f,1.0f };		//初期方向ベクトル
+	m_MaxRotatAngle = 0.0f;
 }
 
 cPlayer::~cPlayer()
@@ -21,14 +33,16 @@ cPlayer::~cPlayer()
 
 void cPlayer::Draw()
 {
-	
 	DrawMesh(0, m_anmCnt);
 }
 
 void cPlayer::Update()
 {
+	PlayerParamUpdate();
 	Move();
 	m_anmCnt++;	//アニメーションのカウントを進めておく
+
+	PlayerVectChange();
 }
 
 void cPlayer::SetCameraData(ViewProj data)
@@ -36,24 +50,62 @@ void cPlayer::SetCameraData(ViewProj data)
 	m_CameraData = data;
 }
 
+void cPlayer::PlayerParamUpdate()
+{
+	m_LuaScript->CallFunc("RetMoveSpeed", 2);
+	m_WalkAddSpeed = m_LuaScript->m_Ret.GetNumber(0);
+	 m_DashAddSpeed = m_LuaScript->m_Ret.GetNumber(1);
+
+	m_LuaScript->CallFunc("Switching", 1);
+	m_Switching = m_LuaScript->m_Ret.GetNumber(0);
+
+	m_LuaScript->CallFunc("MaxSpeed", 4);
+	m_MaxDashSpeed = m_LuaScript->m_Ret.GetNumber(0);
+	m_MaxWalkSpeed = m_LuaScript->m_Ret.GetNumber(1);
+	m_Accele = m_LuaScript->m_Ret.GetNumber(2);
+	m_Decele = m_LuaScript->m_Ret.GetNumber(3);
+
+	m_LuaScript->CallFunc("MaxRotatAngle", 1);
+	m_MaxRotatAngle = m_LuaScript->m_Ret.GetNumber(0);
+}
+
 /// <summary>
 /// キー情報を取得してキャラクターを移動させる
 /// </summary>
 void cPlayer::Move()
 {
-	//移動に関するパラメータを取得
-	m_LuaScript->CallFunc("RetMoveSpeed", 1);
-	const float speed = m_LuaScript->m_Ret.GetNumber(0);
-
 	//左スティックの情報を取得する
 	XMFLOAT2 moveVec = GetGamePad->LeftStick();
-	moveVec = XMFLOAT2{ moveVec.x * speed,moveVec.y * speed };
+
+	XMVECTOR vec = XMLoadFloat2(&moveVec);
+	vec = XMVector2Length(vec);
+	float speed = 0.0f;
+	//移動ベクトルがなければ処理の必要なし
+	if ((*vec.m128_f32) == 0.0f) {
+		m_NowSpeed *= m_Decele;
+	}
+	else {
+		InputAngleCorrection(MoveCorrection(moveVec, (*vec.m128_f32)));
+		if ((*vec.m128_f32) > m_Switching) {
+			m_MoveState = DASH;
+			speed = m_DashAddSpeed;
+		}	// end ダッシュ時の速度
+		else {
+			m_MoveState = WALK;
+			speed = m_WalkAddSpeed;
+		}	// end 歩き時の速度
+		m_NowSpeed += speed;
+	}	//end else 移動ベクトルなし
+
+	MovingSpeedClamp();
+	moveVec = XMFLOAT2{ m_NowVect.x * m_NowSpeed,m_NowVect.y * m_NowSpeed };
 	
 
 	//回転の補間を行う
 	RotationCalculation(moveVec);
 
-	this->Translation({ MoveCorrection(moveVec) });
+	this->Translation({ moveVec.x,0.0f,moveVec.y });
+	XMFLOAT3 NaNCheck = GetPosition();
 	//回転の処理を追加する
 
 
@@ -101,6 +153,49 @@ void cPlayer::PosClamp()
 }
 
 /// <summary>
+/// キャラクターの入力件数
+/// </summary>
+/// <param name="inp"></param>
+void cPlayer::InputAngleCorrection(DirectX::XMFLOAT2 inp)
+{
+	// 移動ベクトルと方向ベクトルの角度差を求めて
+	//角度差が大きければ
+	XMVECTOR Vec = XMLoadFloat2(&m_NowVect);
+	XMVECTOR Inp = XMLoadFloat2(&inp);
+
+	Vec = XMVector2Normalize(Vec);
+	Inp = XMVector2Normalize(Inp);
+
+	XMVECTOR dot = XMVector2Dot(Vec, Inp);
+	XMVECTOR cross = XMVector3Cross(Vec, Inp);	//入力が右方向なら上方向ベクトルが変える
+	float XVec = cross.m128_f32[2];
+	float si = *(dot.m128_f32);
+	// NaN対策で範囲を-1 ~ 1に
+	if (si > 1.0f) si = 1.0f;
+	if (si < -1.0f) si = -1.0f;
+	float ang = XMConvertToDegrees(acosf(si));			//内積の値から角度を求めた
+	const float MaxAng = m_MaxRotatAngle;
+	float RotAng = ang;	//ここに回転角を入れる
+
+	//角度が最大回転角を上回っていれば最大回転角に変更する
+	if (ang > MaxAng) 
+		RotAng = MaxAng;
+
+	//入力が真後ろに近い場合は急旋回させる
+	if (si < -0.9f) {
+		RotAng = MaxAng * 30.0f;
+		if (XVec == 0.0f) {
+			XVec = 1.0f;
+		}
+	}
+
+	//方向ベクトルを回転させる
+	Vec = XMVector2TransformCoord(Vec, XMMatrixRotationZ(XMConvertToRadians(RotAng * XVec)));
+	Vec = XMVector2Normalize(Vec);
+	XMStoreFloat2(&m_NowVect, Vec);
+}
+
+/// <summary>
 /// キャラクターが移動をする際のモデルの回転を制御する
 /// </summary>
 /// <param name="ProgressDir"></param>
@@ -126,21 +221,89 @@ void cPlayer::RotationCalculation(XMFLOAT2 ProgressDir)
 	Rotation(0.0f, deg, 0.0f);
 }
 
-DirectX::XMFLOAT3 cPlayer::MoveCorrection(DirectX::XMFLOAT2 ProgressDir)
+/// <summary>
+/// プレイヤーの進行方向からモデルの向きを計算し、変更する関数
+/// </summary>
+void cPlayer::PlayerVectChange()
 {
-	//カメラから見て前方と右方向を取得する
-	XMVECTOR vecX = { m_CameraData.vView._11 ,0.0f ,m_CameraData.vView._31 };
-	XMVECTOR vecZ = { m_CameraData.vView._13 ,0.0f ,m_CameraData.vView._33 };
-
-	vecX = XMVector3Normalize(vecX);
+	//移動方向と上ベクトルが判明しているので外戚でXベクトルを作成する
+	XMVECTOR vecZ = { m_NowVect.x ,0.0f ,m_NowVect.y };
 	vecZ = XMVector3Normalize(vecZ);
+	XMVECTOR vecY = { 0.0f,1.0f,0.0f };	//上方向は常に真上
+	XMVECTOR vecX = XMVector3Cross(vecY, vecZ);
+	//vecX = XMVector3Normalize(vecX);
 
-	vecX *= ProgressDir.x;
+	XMFLOAT3 vX = {};
+	XMFLOAT3 vY = {};
+	XMFLOAT3 vZ = {};
+	XMStoreFloat3(&vX, vecX);
+	XMStoreFloat3(&vY, vecY);
+	XMStoreFloat3(&vZ, vecZ);
+
+	XMFLOAT4X4 mat;
+	mat._11 = vX.x;
+	mat._12 = vX.y;
+	mat._13 = vX.z;
+	mat._14 = 0.0f;
+
+	mat._21 = vY.x;
+	mat._22 = vY.y;
+	mat._23 = vY.z;
+	mat._24 = 0.0f;
+
+	mat._31 = vZ.x;
+	mat._32 = vZ.y;
+	mat._33 = vZ.z;
+	mat._34 = 0.0f;
+
+	SetRotateMatrix(mat);
+
+	//最後に拡縮調整
+	Scaling(m_ConstScal);
+}
+
+DirectX::XMFLOAT2 cPlayer::MoveCorrection(DirectX::XMFLOAT2 ProgressDir, const float speed)
+{
+	//カメラから見て前方とを取得する
+	XMVECTOR vecZ = { m_CameraData.vView._13 ,0.0f ,m_CameraData.vView._33 };
+	vecZ = XMVector3Normalize(vecZ);
+	XMVECTOR vecY = { 0.0f,1.0f,0.0f };	//上方向は常に真上
+	XMVECTOR vecX = XMVector3Cross(vecY, vecZ);
 	vecZ *= ProgressDir.y;
+	vecX *= ProgressDir.x;
 
-	vecX += vecZ;
+	XMVECTOR v = vecX + vecZ;
+	v = XMVector3Normalize(v);
+	v *= speed;
+	XMFLOAT3 buf = {};
+	XMStoreFloat3(&buf, v);
 
-	XMFLOAT3 ret{};
-	XMStoreFloat3(&ret, vecX);
-	return ret;
+	return XMFLOAT2{ buf.x, buf.z };
+}
+
+/// <summary>
+/// 移動速度の範囲調整を行う
+/// </summary>
+void cPlayer::MovingSpeedClamp()
+{
+	if (m_NowSpeed < 0.001f) {
+		m_NowSpeed = 0.0f;
+		return;
+	}
+
+	float maxSpeed = 0.0f;
+	switch (m_MoveState)
+	{
+	case cPlayer::WALK:
+		maxSpeed = m_MaxWalkSpeed;
+		break;
+	case cPlayer::DASH:
+		maxSpeed = m_MaxDashSpeed;
+		break;
+	}
+
+	if (m_NowSpeed > maxSpeed) {
+		m_NowSpeed = maxSpeed;
+		return;
+	}
 }

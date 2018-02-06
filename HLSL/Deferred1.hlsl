@@ -56,7 +56,7 @@ void GS(triangle INPUT_RAW_DATA input[3],
         output.Normal = mul(input[i].Normal, mW);
         output.UV = input[i].Tex;
         float4 lightVewPos = mul(input[i].Pos, mWLP); //ライト位置での座用を出して…
-        output.LightDepth = lightVewPos.z; //その深度値を求める。(深度値の線形補間行列をアプリ側でかけてるのでZをそのまま代入)
+        output.LightDepth = lightVewPos; //その深度値を求める。(深度値の線形補間行列をアプリ側でかけてるのでZをそのまま代入)
         output.LightUV = mul(input[i].Pos, mWLPB); //この点が、ライトビューであったときの位置がわかる
         output.WorldPos = mul(input[i].Pos, mW);
         output.Depth = mul(input[i].Pos, mDepthWVP);
@@ -124,12 +124,6 @@ PS_OUTPUT PS(PS_INPUT In)
 	Out.vNormal.w = In.Pos.z / In.Pos.w;
 	Out.vScreenSpaceSSS = g_MaterialMaskTex.Sample(g_samLinear, In.UV).r;  //SSSSS
 
-    //深度値の比較のためにテクスチャから情報取得
-	// TODO 影内判定を入れる
-    //In.LightUV /= In.LightUV.w;
-    //float TexValue = g_shadowTex.Sample(g_samLinear, In.LightUV).r;     //ライト位置から見た深度
-    //Out.vShadow = (TexValue + 0.0001f < In.LightDepth) ? 0.6f : 1.0f; //比較して代入
-
 	//カラー計算
 	Out.vColor = g_tex.Sample(g_samLinear, In.UV);  //描画色
 	Out.vBright = Emission; //自発光色
@@ -140,8 +134,8 @@ PS_OUTPUT PS(PS_INPUT In)
 		Out.vColor.w = 1.0f;
 		//高輝度部抽出
 		Out.vBright += Out.vColor;
-		Out.vBright -= 1.5f;		//ここを強めると高輝度部が狭まる
-		Out.vBright *= 30.0f;		//ここを強めるとはっきりとした色になる
+		Out.vBright -= HighlightSub;		//ここを強めると高輝度部が狭まる
+		Out.vBright *= HighlightSum;		//ここを強めるとはっきりとした色になる
 		return Out;
 	}
 
@@ -156,17 +150,21 @@ PS_OUTPUT PS(PS_INPUT In)
 	 deif = deif * 0.5f + 0.5;
 	 deif = deif * deif;
 
-	//ブリンフォンで照明
-	//float deif = max(0.0f,dot(In.Normal.xyz,-LightDir.xyz)) + pow(max(0,dot(N,H)),10);
+	float LightVal = LightBorder;
+	float ShadowVal = ShadowBorder;
 
 	// TODO 照明値をパラメータ化すること
-	if(deif >= 0.90f){
-		Out.vColor = g_LightingHighTex.Sample(g_samLinear, In.UV);  //ハイライト
-		}
-	else if(deif >= 0.3f)
-		Out.vColor = g_tex.Sample(g_samLinear, In.UV);  //描画色
-	else
+	if(deif >= LightVal){
+		Out.vColor = g_tex.Sample(g_samLinear, In.UV);  //ハイライト
+	}
+	else if(deif >= ShadowVal){
+		//グラデーションを線形補間でかける
+		float t = (deif - ShadowVal) / (LightVal - ShadowVal);
+		Out.vColor = lerp(g_LightingShadowTex.Sample(g_samLinear, In.UV),g_tex.Sample(g_samLinear, In.UV),t);
+	}
+	else{
 		Out.vColor = g_LightingShadowTex.Sample(g_samLinear, In.UV);  //シャドウ部
+	}
 
 	Out.vBright = Out.vColor;
 	Out.vBright.xyz *= 0.3f;
@@ -175,9 +173,11 @@ PS_OUTPUT PS(PS_INPUT In)
 	//スクリーンスペースサブサーフェススキャッタリングのディフューズ情報を入れる。wにはマスクを入れたのでこれでSSSSS部のディフューズだけ取り出せる
 	Out.vScreenSpaceSSS.xyz = Out.vScreenSpaceSSS.w * Out.vColor.xyz;
 
-	 //In.LightUV /= In.LightUV.w;
-    //float TexValue = g_shadowTex.Sample(g_samLinear, In.LightUV).r;     //ライト位置から見た深度
-    //Out.vColor.xyz *= (TexValue + 0.0001f < In.LightDepth) ? 0.0f : 1.0f; //比較して代入
+	 In.LightUV /= In.LightUV.w;
+	In.LightUV = clamp(In.LightUV,0.0f,1.0f);
+    float TexValue = g_shadowTex.Sample(g_samLinear, In.LightUV).r;     //ライト位置から見た深度
+	In.LightDepth.z /= In.LightDepth.w;
+    Out.vColor.xyz = (TexValue + 0.001f < In.LightDepth.z) ? g_LightingShadowTex.Sample(g_samLinear, In.UV) : Out.vColor; //比較して代入
    
     return Out;
 }

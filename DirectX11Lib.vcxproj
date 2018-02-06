@@ -164,12 +164,14 @@
     <ClCompile Include="src\BackGroundModel.cpp" />
     <ClCompile Include="src\BillBoard.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CameraManager.cpp" />
     <ClCompile Include="src\ComboBox.cpp" />
     <ClCompile Include="src\CrossFilter.cpp" />
     <ClCompile Include="src\DeferredBaseModel.cpp" />
     <ClCompile Include="src\DeferredConst.cpp" />
     <ClCompile Include="src\DeferredDemo.cpp" />
     <ClCompile Include="src\DeferredRendering.cpp" />
+    <ClCompile Include="src\DepthOfField.cpp" />
     <ClCompile Include="src\DirectionalLight.cpp" />
     <ClCompile Include="src\DirectX11.cpp" />
     <ClCompile Include="src\FbxLoad.cpp" />
@@ -211,6 +213,7 @@
     <ClCompile Include="src\Tessellation.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\TimeCheck.cpp" />
+    <ClCompile Include="src\ToonParam.cpp" />
     <ClCompile Include="src\WinMain.cpp" />
     <ClCompile Include="src\XFileLoad.cpp" />
   </ItemGroup>
@@ -222,6 +225,7 @@
     <ClInclude Include="src\BillBoard.h" />
     <ClInclude Include="src\BoneStruct.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\CameraManager.h" />
     <ClInclude Include="src\ComboBox.h" />
     <ClInclude Include="src\CompileOptions.h" />
     <ClInclude Include="src\ConstantBuffer.h" />
@@ -230,6 +234,7 @@
     <ClInclude Include="src\DeferredConst.h" />
     <ClInclude Include="src\DeferredDemo.h" />
     <ClInclude Include="src\DeferredRendering.h" />
+    <ClInclude Include="src\DepthOfField.h" />
     <ClInclude Include="src\DirectionalLight.h" />
     <ClInclude Include="src\DirectX11.h" />
     <ClInclude Include="src\DirectXData.h" />
@@ -275,6 +280,7 @@
     <ClInclude Include="src\Tessellation.h" />
     <ClInclude Include="src\TextureManager.h" />
     <ClInclude Include="src\TimeCheck.h" />
+    <ClInclude Include="src\ToonParam.h" />
     <ClInclude Include="src\Vertex.h" />
     <ClInclude Include="src\WindProc.h" />
     <ClInclude Include="src\WinMain.h" />

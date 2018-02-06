@@ -49,8 +49,9 @@ void cDeferredConst::SetShader(bool _mtrOnly)
 		XMMATRIX _w = XMLoadFloat4x4(&m_World);
 		XMMATRIX _wvp = _w * XMLoadFloat4x4(&m_View) * XMLoadFloat4x4(&m_Proj);
 		XMVECTOR _lightVec = XMLoadFloat3(&m_LightPos);
-		_lightVec = XMVector3Normalize(_lightVec);		//正規化
-		_lightVec *= m_Far * 0.95f;									//ファーの半分で
+		_lightVec = XMVector3Normalize(-_lightVec);		//正規化
+		//m_Lookpt = { 0.0f,0.0f,0.0f };
+		_lightVec *= 250.0f;									//ファーの半分で
 		_lightVec += XMLoadFloat3(&m_Lookpt);
 		XMMATRIX _l = XMMatrixLookAtLH(_lightVec, XMLoadFloat3(&m_Lookpt), { 0,1,0 });		//ライト位置からのビュー
 
@@ -92,12 +93,16 @@ void cDeferredConst::SetCameraData(const CameraData& _cameraData, ViewProj _vp)
 		(float)SHADOW_MAP_WIDTH / (float)SHADOW_MAP_HEIGHT,	// アスペクト比
 		SHADOW_MAP_NEAR,							// 前方投影面までの距離
 		SHADOW_MAP_FAR);							// 後方投影面までの距離
+
+	// TODO 平行投影を試しで入れていく
+	float rate = 100.0f;
+	Proj = DirectX::XMMatrixOrthographicLH((float)100.0f, (float)100.0f, 100.0f, 300.0f);
 	XMStoreFloat4x4(&ProjBuf, Proj);
 	//深度値の線形補間(参考 : http://marupeke296.com/DXG_No71_depthbuffer.html)
-	float _33 = 1.0f / (SHADOW_MAP_FAR - SHADOW_MAP_NEAR);
-	float _43 = -SHADOW_MAP_NEAR / (SHADOW_MAP_FAR - SHADOW_MAP_NEAR);
-	ProjBuf._33 = _33;
-	ProjBuf._43 = _43;
+	//float _33 = 1.0f / (SHADOW_MAP_FAR - SHADOW_MAP_NEAR);
+	//float _43 = -SHADOW_MAP_NEAR / (SHADOW_MAP_FAR - SHADOW_MAP_NEAR);
+	//ProjBuf._33 = _33;
+	//ProjBuf._43 = _43;
 	m_DepthProj = ProjBuf;
 	m_Near = _cameraData.vNear;
 	m_Far = _cameraData.vFar;

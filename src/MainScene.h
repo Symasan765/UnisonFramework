@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "BackGroundModel.h"
 #include "Camera.h"
+#include "CameraManager.h"
 
 class cMainScene : public cGameScene {
 public:
@@ -23,4 +24,5 @@ private:
 	cDeferredModel* m_pGround;
 	cPlayer* m_pPlayer;
 	cBacGroundModel* m_BackGround;
+	cCameraManager* m_CameraManager;
 };

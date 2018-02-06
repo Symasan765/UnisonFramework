@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "DirectionalLight.h"
 #include "GBuffer.h"
+#include "ToonParam.h"
 
 /// <summary>
 /// シーンに適用するシェーダのフラグを管理する
@@ -65,6 +66,8 @@ public:
 	cCamera m_CameraData;
 	cDirectionalLight m_DirectionalLight;	//ディクショナルライト
 	SeneRenderFlag m_RenderFlag;				//適用するシェーダフラグ
+
+	cToonParam m_ToonParam;		//トゥーンパラメータ用クラス
 private:
 	static void SetDirectXData(DirectXData _data);
 	static DirectXData m_DirectXData;		//システムデータをシーン全体で保持する

@@ -73,7 +73,7 @@ PS_OUTPUT PS(PS_INPUT In)
     PS_OUTPUT Out = (PS_OUTPUT) 0;
 	
 	//ÉâÉìÉoÅ[ÉgÇ≈è∆ñæ
-	 float deif = dot(In.Normal.xyz, -LightDir.xyz);
+	 float deif = dot(normalize(In.Normal.xyz), -normalize(LightDir.xyz));
 	 deif = deif * 0.5f + 0.5;
 	 deif = deif * deif;
 

@@ -33,6 +33,7 @@ public:
 	void SetMatrix(const DirectX::XMFLOAT4X4);
 	//	/*===ワールド行列へ計算を行う(これ残すだろうか…)===*/
 	//	void MatrixCalculation();
+	void SetRotateMatrix(const DirectX::XMFLOAT4X4 rotMat);
 	//	/*===向いている方向への移動===*/
 	virtual void VectMove(const float);
 	void WorldRotation(const float, const float, const float);		//ワールド軸を基準に回転させる。原点移動しない

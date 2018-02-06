@@ -33,14 +33,22 @@ cbuffer global_bones : register(b2) //ボーンのポーズ行列が入る
     matrix g_mConstBoneWorld[MAX_BONE_MATRICES];
 };
 
-cbuffer global_0:register(b3)
+cbuffer global_Light:register(b3)
 {	
 	float4 LightDir;		//ライト位置
 	float4 I_Ambient;
 	float4 I_Deffuse;
 };
 
-cbuffer global_0:register(b4)
+cbuffer global_Camera:register(b4)
 {	
 	float4 CameraPos;
+};
+
+cbuffer global_ToonParam:register(b5)
+{	
+	float LightBorder;
+	float ShadowBorder;
+	float HighlightSub;
+	float HighlightSum;
 };

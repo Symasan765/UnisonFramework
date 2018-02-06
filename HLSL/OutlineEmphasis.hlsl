@@ -20,6 +20,17 @@ struct ToonEdge {
     SamplerState samp; //サンプラー
 };
 
+cbuffer WorldMatrix : register(b0) {
+    matrix g_mWVP; //ワールドから射影までの変換行列
+};
+
+cbuffer OutlineParam : register(b1) {
+    float g_offsetScall;
+	float g_DepthRange;
+	float g_NormalRange;
+	float g_OutlineSum;
+};
+
 //トゥーンレンダリングでの輪郭線抽出を法線情報と深度情報を用いて判定を行う関数
 float4 ToonEdgeWithNormalAndDepth(ToonEdge Data)
 {
@@ -72,15 +83,11 @@ float4 ToonEdgeWithNormalAndDepth(ToonEdge Data)
     float edge = 1.0f;		//輪郭線ではない前提。
     if(max(abs(depthEdge), normalEdge)  > Data.DepthRange)
     {
-        destColor.xyz = (colorData.xyz / 9.0f) * 0.3f;	//色を少し暗くする
+        destColor.xyz = (colorData.xyz / 9.0f) * (g_OutlineSum);	//色を少し暗くする
     }
 
     return destColor;
 }
-
-cbuffer WorldMatrix : register(b0) {
-    matrix g_mWVP; //ワールドから射影までの変換行列
-};
 
 //バーテックスバッファー出力構造体
 struct VS_OUTPUT {
@@ -103,11 +110,11 @@ float4 PS(VS_OUTPUT input) : SV_Target
     ToonEdge toonData;
     toonData.Color = g_colorTex.Sample(g_samLinear, input.Tex); //輪郭線でなければこの色を返す色
     toonData.Tex = input.Tex; //求めたいテクスチャ座標
-    toonData.offsetScall = 1.0f; //解像度で割る値。数値が大きいとそれだけ多くのテクセルをまたいで判定を行うので線が太くなる
-    toonData.DepthRange = 0.01f; //輪郭線として取り扱うサイズ。線の太さではなく有効範囲の拡大
+    toonData.offsetScall = g_offsetScall * g_NormalTex.Sample(g_samLinear, input.Tex); //解像度で割る値。数値が大きいとそれだけ多くのテクセルをまたいで判定を行うので線が太くなる
+    toonData.DepthRange = g_DepthRange; //輪郭線として取り扱うサイズ。線の太さではなく有効範囲の拡大
     toonData.normTex = g_NormalTex; //法線テクスチャ
     toonData.samp = g_samLinear; //サンプラー
-    toonData.NormalRange = 1.0f;
+    toonData.NormalRange = g_NormalRange;
 
     return ToonEdgeWithNormalAndDepth(toonData);
 }

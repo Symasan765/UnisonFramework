@@ -18,8 +18,8 @@ cGameScene::cGameScene()
 	m_Fog.vShadowFlag = true;
 
 	//”íÊŠE[“x‚Ì‰Šú’l
-	m_DoF.vBlur = 2.0f;
-	m_DoF.vDoFRange = 2.0f;
+	m_DoF.vBlur = 5.0f;
+	m_DoF.vDoFRange = -10.3f;
 	m_DoF.vScreenPos = { 0.5f,0.5f };
 
 	m_Blur.RadialBlurFlag = false;

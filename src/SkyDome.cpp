@@ -1,4 +1,5 @@
 #include "SkyDome.h"
+#include "WinMain.h"
 
 cSkyDome::cSkyDome()
 {
@@ -6,6 +7,7 @@ cSkyDome::cSkyDome()
 	m_SkyDome->LoadData("ToonSkyDome.x", 1);
 	m_SkyDome->Rotation(-90.0f, 0.0, 0.0f);
 	m_SkyDome->Scaling(5.0f);
+	m_RotAngle = 0.0f;
 
 	//シェーダデータロード。IA情報などはすべてディファードレンダリング扱いでOK
 	m_Shader = SHADER::GetInstance()->LoadShaderFile("DeferredSkyDraw.hlsl", inPOSITION | inNORMAL | inTEX_UV | inBone | inWeight, true);
@@ -41,6 +43,8 @@ cSkyDome::~cSkyDome()
 void cSkyDome::DrawSkyDome(CameraData camera)
 {
 	m_SkyDome->SetTrans(camera.vPos);
+	m_SkyDome->SetRotate(-90.0f, m_RotAngle,0.0f);
+	m_RotAngle += 0.02f;
 	m_Shader->Set();
 
 	//スカイドームは必ず無限円でいいのでZテストをOFFにする

@@ -85,6 +85,9 @@
     <Filter Include="PostEffect\HighlightBloom">
       <UniqueIdentifier>{5a7aec29-2af5-43d7-9f93-eaa6bd8c300f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PostEffect\DepthOfField">
+      <UniqueIdentifier>{4b72534f-f6a3-4f58-9745-b662d70a532b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PostEffects.cpp">
@@ -245,6 +248,15 @@
     </ClCompile>
     <ClCompile Include="src\GaussianFilter.cpp">
       <Filter>PostEffect\GaussBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraManager.cpp">
+      <Filter>GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ToonParam.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthOfField.cpp">
+      <Filter>PostEffect\DepthOfField</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +454,15 @@
     </ClInclude>
     <ClInclude Include="src\GaussianFilter.h">
       <Filter>PostEffect\GaussBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraManager.h">
+      <Filter>GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ToonParam.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthOfField.h">
+      <Filter>PostEffect\DepthOfField</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
