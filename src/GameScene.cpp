@@ -10,6 +10,9 @@
 DirectXData cGameScene::m_DirectXData;
 DirectXDrawData cGameScene::m_TexDrawData;
 
+/// <summary>
+/// ゲームシーンがデフォルトで持つべきパラメータを保持している
+/// </summary>
 cGameScene::cGameScene()
 {
 	//フォグの初期値
@@ -25,10 +28,16 @@ cGameScene::cGameScene()
 	m_Blur.RadialBlurFlag = false;
 }
 
+/// <summary>
+/// 解放
+/// </summary>
 cGameScene::~cGameScene()
 {
 }
 
+/// <summary>
+/// 描画設定を基本設定に変更している
+/// </summary>
 void cGameScene::SetDefaultRender()
 {
 	GetDirectX::InitOMSetRenderTargets();
@@ -47,6 +56,10 @@ void cGameScene::SetDefaultRender()
 	GetDirectX::Context()->OMSetDepthStencilState(m_DirectXData.v_pDepthStencilState, 0);
 }
 
+/// <summary>
+/// ブレンドステートを設定する
+/// </summary>
+/// <param name="_OnFlag">ブレンドステート種類</param>
 void cGameScene::SetBlendState(BrendStateNo _OnFlag)
 {
 	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -65,21 +78,37 @@ void cGameScene::SetBlendState(BrendStateNo _OnFlag)
 	}
 }
 
+/// <summary>
+/// フォグのカラー
+/// </summary>
+/// <param name="_Color"></param>
 void cGameScene::SetFogColor(const DirectX::XMFLOAT4 & _Color)
 {
 	m_Fog.vColor = _Color;
 }
 
+/// <summary>
+/// フォグの強度
+/// </summary>
+/// <param name="_f"></param>
 void cGameScene::SetFogFactor(const float _f)
 {
 	m_Fog.vFactor = _f;
 }
 
+/// <summary>
+/// シャドウマップを付けるかどうか
+/// </summary>
+/// <param name="_Flag">on true : off false</param>
 void cGameScene::SetShadowFlag(bool _Flag)
 {
 	m_Fog.vShadowFlag = _Flag;
 }
 
+/// <summary>
+/// ラスタライザステートを設定する
+/// </summary>
+/// <param name="mode"></param>
 void cGameScene::SetRasterizerState(CullMode mode)
 {
 	// OMにブレンド・ステート・オブジェクトを設定
@@ -101,6 +130,9 @@ void cGameScene::SetRasterizerState(CullMode mode)
 	}
 }
 
+/// <summary>
+/// レンダリングターゲットを画面に切り替え
+/// </summary>
 void cGameScene::SetRendBuffer()
 {
 	this->SetDefaultRender();
@@ -108,6 +140,12 @@ void cGameScene::SetRendBuffer()
 	GetDirectX::Context()->OMSetRenderTargets(1, &m_DirectXData.v_pRenderTargetView, true ? m_DirectXData.v_pDepthStencilView : NULL);
 }
 
+/// <summary>
+/// 放射ブラーを設定する
+/// </summary>
+/// <param name="_Pos"></param>
+/// <param name="_Delta"></param>
+/// <param name="_Num"></param>
 void cGameScene::SetRadialBlur(DirectX::XMFLOAT3 _Pos, float _Delta, int _Num)
 {
 	m_Blur.vBlurPos = _Pos;
@@ -116,6 +154,9 @@ void cGameScene::SetRadialBlur(DirectX::XMFLOAT3 _Pos, float _Delta, int _Num)
 	m_Blur.RadialBlurFlag = true;		//次描画せよ
 }
 
+/// <summary>
+/// 深度/ステンシルステートオブジェクトを設定
+/// </summary>
 void cGameScene::SetDepthStencilState()
 {
 	// OMに深度/ステンシル・ステート・オブジェクトを設定
@@ -136,6 +177,11 @@ bool cGameScene::IsRadialBlur()
 	return false;
 }
 
+/// <summary>
+/// ラジアルブラー情報を取得
+/// </summary>
+/// <param name="_VP"></param>
+/// <returns></returns>
 RadialBlurData cGameScene::GetRadialBlur(const DirectX::XMFLOAT4X4& _VP)
 {
 	//ラジアルブラーでぼかす位置を計算して渡す
@@ -153,6 +199,10 @@ RadialBlurData cGameScene::GetRadialBlur(const DirectX::XMFLOAT4X4& _VP)
 	return data;
 }
 
+/// <summary>
+/// シーンが保持するDirectX系データを取得する
+/// </summary>
+/// <param name="_data"></param>
 void cGameScene::SetDirectXData(DirectXData _data)
 {
 	m_DirectXData = _data;

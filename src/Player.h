@@ -36,7 +36,7 @@ private:
 
 	//状態
 	float m_ConstScal;	//モデルのサイズを変える必要があるため本番環境では不要になると思われる
-	int m_anmCnt;
+	float m_anmCnt;
 	float m_NowSpeed;		//移動方向ベクトルを管理する
 	DirectX::XMFLOAT2 m_NowVect;			//キャラクターの方向を管理する
 

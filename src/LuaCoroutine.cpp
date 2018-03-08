@@ -8,6 +8,12 @@
 #include "LuaCoroutine.h"
 #include <Windows.h>
 
+/// <summary>
+/// コルーチンクラスの初期化
+/// </summary>
+/// <param name="pActor"></param>
+/// <param name="_FuncName"></param>
+/// <param name="result_count"></param>
 cLuaCoroutine::cLuaCoroutine(cLuaActor* pActor, const std::string _FuncName, int result_count)
 {
 	pActor->PushCoroutine(this);	//参照をアクターに管理してもらう
@@ -18,6 +24,9 @@ cLuaCoroutine::cLuaCoroutine(cLuaActor* pActor, const std::string _FuncName, int
 	SetLuaNewCoroutine(m_ParentL);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cLuaCoroutine::~cLuaCoroutine()
 {
 	// コルーチンの削除
@@ -27,6 +36,10 @@ cLuaCoroutine::~cLuaCoroutine()
 	lua_settable(m_ParentL, LUA_REGISTRYINDEX);*/		// TODO 現状ここでランタイムエラーが発生する。原因不明
 }
 
+/// <summary>
+/// 新しいコルーチンをセットする
+/// </summary>
+/// <param name="L"></param>
 void cLuaCoroutine::SetLuaNewCoroutine(lua_State * L)
 {
 	int top = lua_gettop(L);
@@ -46,13 +59,16 @@ void cLuaCoroutine::SetLuaNewCoroutine(lua_State * L)
 	lua_settop(L, top);
 }
 
+/// <summary>
+/// Reload処理
+/// </summary>
 void cLuaCoroutine::Reload()
 {
 	SetLuaNewCoroutine(m_ParentL);
 }
 
 /// <summary>
-/// 
+///  実行処理
 /// </summary>
 /// <param name="funcname"></param>
 /// <param name="result_count"></param>
@@ -93,7 +109,11 @@ bool cLuaCoroutine::Execution()
 	return (res_call == 0);	// true : 関数成功
 }
 
-
+/// <summary>
+/// どういうエラーを起こしているか判定する
+/// </summary>
+/// <param name="res_call"></param>
+/// <param name="location"></param>
 void cLuaCoroutine::AnalyzeError(int res_call, std::string location)
 {
 	std::string reason = "";

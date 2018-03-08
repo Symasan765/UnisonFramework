@@ -10,6 +10,12 @@
 #include "TextureManager.h"
 #include "DirectX11.h"
 
+/// <summary>
+/// FBXからメッシュ情報をロードする
+/// </summary>
+/// <param name="mesh">格納するメッシュアドレス</param>
+/// <param name="_fileName">ファイル名。</param>
+/// <returns></returns>
 HRESULT cFbxLoad::GetFBXLoader(Mesh3D * mesh, std::string _fileName)
 {
 	//FBXの初期化
@@ -41,7 +47,11 @@ HRESULT cFbxLoad::GetFBXLoader(Mesh3D * mesh, std::string _fileName)
 	//マテリアル情報を取得
 }
 
-
+/// <summary>
+/// FBXマネージャの初期化
+/// </summary>
+/// <param name="_fileName"></param>
+/// <returns></returns>
 HRESULT cFbxLoad::Init(std::string _fileName) {
 	//マネージャー作成
 	m_pManager = FbxManager::Create();
@@ -66,6 +76,11 @@ HRESULT cFbxLoad::Init(std::string _fileName) {
 	return S_OK;
 }
 
+/// <summary>
+/// メッシュ情報を取得する
+/// </summary>
+/// <param name="node"></param>
+/// <param name="meshdata"></param>
 void cFbxLoad::GetMesh(FbxNode* node, Mesh3D* meshdata) {
 	//--- ノードの属性を取得 ---//
 	FbxNodeAttribute* attr = node->GetNodeAttribute();
@@ -91,6 +106,11 @@ void cFbxLoad::GetMesh(FbxNode* node, Mesh3D* meshdata) {
 	}
 }
 
+/// <summary>
+/// メッシュデータを取得していく
+/// </summary>
+/// <param name="pFbxMesh"></param>
+/// <param name="meshdata"></param>
 void cFbxLoad::GetMeshData(FbxMesh* pFbxMesh, Mesh3D* meshdata) {
 	//事前に頂点数、ポリゴン数等を調べる
 	int m_VertexCount = pFbxMesh->GetControlPointsCount();	//頂点の数
@@ -337,6 +357,13 @@ void cFbxLoad::GetMeshData(FbxMesh* pFbxMesh, Mesh3D* meshdata) {
 	return;
 }
 
+/// <summary>
+/// インデックスバッファを作成する
+/// </summary>
+/// <param name="dwSize"></param>
+/// <param name="pIndex"></param>
+/// <param name="ppIndexBuffer"></param>
+/// <returns></returns>
 HRESULT cFbxLoad::CreateIndexBuffer(DWORD dwSize, int* pIndex, ID3D11Buffer** ppIndexBuffer) {
 	D3D11_BUFFER_DESC bd;
 	bd.Usage = D3D11_USAGE_DEFAULT;

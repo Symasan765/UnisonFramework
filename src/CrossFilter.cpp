@@ -3,6 +3,9 @@
 
 using namespace DirectX;
 
+/// <summary>
+/// 初期化
+/// </summary>
 cCrossFilter::cCrossFilter() : cPostEffects("CrossFilter.hlsl")
 {
 	m_pBufRenderTarget = new cRenderTargetTex[m_StarNum * 2];		// レンダーターゲットとリソースを交互に切り替えるので光線の倍作っておく
@@ -13,11 +16,18 @@ cCrossFilter::cCrossFilter() : cPostEffects("CrossFilter.hlsl")
 	LightBeamInit();
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cCrossFilter::~cCrossFilter()
 {
 	delete[] m_pBufRenderTarget;
 }
 
+/// <summary>
+/// 描画
+/// </summary>
+/// <param name="inData"></param>
 void cCrossFilter::DrawCrossFilter(ID3D11ShaderResourceView * inData)
 {
 	// for分で引き伸ばし回数分だけ処理を連続させる(3回分)
@@ -53,6 +63,10 @@ void cCrossFilter::DrawCrossFilter(ID3D11ShaderResourceView * inData)
 	}	//end for 引き伸ばし回数
 }
 
+/// <summary>
+/// 描画データを取得する
+/// </summary>
+/// <returns></returns>
 ID3D11ShaderResourceView * cCrossFilter::GetResourceView()
 {
 	return nullptr;

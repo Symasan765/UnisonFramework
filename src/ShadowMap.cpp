@@ -12,17 +12,27 @@ namespace {
 	const int DepthY = SHADOW_MAP_HEIGHT;
 }
 
+/// <summary>
+/// 描画前にデータとともにセットする
+/// </summary>
 void cShadowMap::SetRender()
 {
 	m_Shader->Set();
 	m_DepthTarget->SetRenderTargetTex();
 }
 
+/// <summary>
+/// 深度マップを取得する
+/// </summary>
+/// <returns></returns>
 ID3D11ShaderResourceView* cShadowMap::GetDepthResourceView()
 {
 	return m_DepthTarget->GetTextureResourceView();
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
 cShadowMap::cShadowMap()
 {
 	//書き込みテクスチャ作成
@@ -33,6 +43,9 @@ cShadowMap::cShadowMap()
 	m_Shader = SHADER::GetInstance()->LoadShaderFile("ShadowMap.hlsl", inPOSITION | inNORMAL | inTEX_UV | inBone | inWeight,true);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cShadowMap::~cShadowMap()
 {
 	delete m_DepthTarget;

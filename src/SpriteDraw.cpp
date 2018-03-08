@@ -12,10 +12,12 @@
 
 using namespace CompileOptions;
 
-namespace {
-	int indexCnt;
-}
-
+/// <summary>
+/// スプライトの描画を行う
+/// </summary>
+/// <param name="_tex">描画するテクスチャ</param>
+/// <param name="_LeftTop">右上の座標(スクリーンスペース)</param>
+/// <param name="_RightDown">左下の座標(スクリーンスペース)</param>
 void cSprite2DDraw::Draw(ID3D11ShaderResourceView * _tex, DirectX::XMFLOAT2 _LeftTop, DirectX::XMFLOAT2 _RightDown)
 {
 	//まずは変換行列を作成する
@@ -74,6 +76,9 @@ void cSprite2DDraw::Draw(ID3D11ShaderResourceView * _tex, DirectX::XMFLOAT2 _Lef
 	m_NowDepth -= 0.001f;		//スプライトの描画を前面にずらす
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
 cSprite2DDraw::cSprite2DDraw()
 {
 	vpVertexShader = nullptr;
@@ -84,6 +89,9 @@ cSprite2DDraw::cSprite2DDraw()
 	Create();
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cSprite2DDraw::~cSprite2DDraw()
 {
 	SAFE_RELEASE(vpVertexShader);
@@ -92,6 +100,9 @@ cSprite2DDraw::~cSprite2DDraw()
 	SAFE_RELEASE(vVertexBuf);
 }
 
+/// <summary>
+/// 描画に利用するデータ群を作成する(初期化時にのみ作成)
+/// </summary>
 void cSprite2DDraw::Create()
 {
 	CreateVertex();
@@ -107,6 +118,10 @@ void cSprite2DDraw::Create()
 	GetDirectX::Device()->CreateSamplerState(&SamDesc, &m_pSampleLinear);
 }
 
+/// <summary>
+/// 頂点情報作成
+/// </summary>
+/// <returns></returns>
 HRESULT cSprite2DDraw::CreateVertex()
 {
 	if (true) {
@@ -140,6 +155,10 @@ HRESULT cSprite2DDraw::CreateVertex()
 	}
 }
 
+/// <summary>
+/// 2Dスプライトを描画するために必要な最もシンプルなシェーダをロードしておく
+/// </summary>
+/// <returns>成否</returns>
 HRESULT cSprite2DDraw::CreateShader()
 {
 	const char* _filePath = "HLSL/Sprite2DDraw.hlsl";

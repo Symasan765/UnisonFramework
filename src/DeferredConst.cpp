@@ -21,6 +21,9 @@ DirectX::XMFLOAT4X4 cDeferredConst::m_Proj;			//プロジェクション行列
 float cDeferredConst::m_Near;
 float cDeferredConst::m_Far;
 
+/// <summary>
+/// 初期化
+/// </summary>
 cDeferredConst::cDeferredConst()
 {
 	m_MaterialConst.data.Flag = { 0,0,0,0 };
@@ -37,10 +40,17 @@ cDeferredConst::cDeferredConst()
 	m_Far = 100.0f;
 }
 
+/// <summary>
+/// 解放。現在は使用予定なし
+/// </summary>
 cDeferredConst::~cDeferredConst()
 {
 }
 
+/// <summary>
+/// シェーダへ定数データをセットする
+/// </summary>
+/// <param name="_mtrOnly">マテリアルのみ設定するか？</param>
 void cDeferredConst::SetShader(bool _mtrOnly)
 {
 	//マテリアルの設定のみでいい場合は飛ばす
@@ -77,6 +87,11 @@ void cDeferredConst::SetShader(bool _mtrOnly)
 	m_MaterialConst.Set(1);		//マテリアルはすでに情報が設定されているものとする
 }
 
+/// <summary>
+/// カメラデータを受け取り保持する
+/// </summary>
+/// <param name="_cameraData">カメラ情報</param>
+/// <param name="_vp">ビュープロジェクション情報</param>
 void cDeferredConst::SetCameraData(const CameraData& _cameraData, ViewProj _vp)
 {
 	//カメラ情報セット
@@ -108,21 +123,39 @@ void cDeferredConst::SetCameraData(const CameraData& _cameraData, ViewProj _vp)
 	m_Far = _cameraData.vFar;
 }
 
+/// <summary>
+/// ライト情報を受け取り保持する
+/// </summary>
+/// <param name="_light">ライトデータ</param>
 void cDeferredConst::SetLightData(const DirectX::XMFLOAT3 & _light)
 {
 	m_LightPos = _light;
 }
 
+/// <summary>
+/// ワールド行列を受け取り保持する
+/// </summary>
+/// <param name="_w"></param>
 void cDeferredConst::SetWorldMatrix(const DirectX::XMFLOAT4X4 & _w)
 {
 	m_World = _w;
 }
 
+/// <summary>
+/// 自発光情報を保持する
+/// </summary>
+/// <param name="_color"></param>
 void cDeferredConst::SetEmission(DirectX::XMFLOAT4 _color)
 {
 	m_MaterialConst.data.Emission = _color;
 }
 
+/// <summary>
+/// マテリアル情報を受け取り保持する
+/// </summary>
+/// <param name="_a"></param>
+/// <param name="_d"></param>
+/// <param name="_s"></param>
 void cDeferredConst::SetMaterial(DirectX::XMFLOAT4 _a, DirectX::XMFLOAT4 _d, DirectX::XMFLOAT4 _s)
 {
 	m_MaterialConst.data.k_a = _a;
@@ -130,11 +163,19 @@ void cDeferredConst::SetMaterial(DirectX::XMFLOAT4 _a, DirectX::XMFLOAT4 _d, Dir
 	m_MaterialConst.data.k_s = _s;
 }
 
+/// <summary>
+/// シェーダタイプを受け取り保持する。このシェーダタイプの使用用途はシェーダ側で自由
+/// </summary>
+/// <param name="_type"></param>
 void cDeferredConst::SetShaderType(const int _type)
 {
 	m_MaterialConst.data.Flag.x = _type;
 }
 
+/// <summary>
+/// カメラデータを取得する
+/// </summary>
+/// <returns>ディファードレンダリングが保持している最新のカメラデータ</returns>
 const CameraData cDeferredConst::GetCameraData() const
 {
 	CameraData data;

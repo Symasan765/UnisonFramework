@@ -1,8 +1,19 @@
+/*=================================================
+//								FILE : CameraManager.cpp
+//		ファイル説明 :
+//		カメラの制御を行うクラス
+//
+//							HAL大阪 : 松本 雄之介
+=================================================*/
 #include "CameraManager.h"
 #include "Input.h"
 
 using namespace DirectX;
 
+/// <summary>
+/// カメラ情報の初期化を行う
+/// </summary>
+/// <param name="playerPos"></param>
 cCameraManager::cCameraManager(DirectX::XMFLOAT3 playerPos)
 {
 	//まずは
@@ -22,17 +33,30 @@ cCameraManager::cCameraManager(DirectX::XMFLOAT3 playerPos)
 	m_NowCameraSpeedX = 0.0f;
 	m_CameraRotPosY = 0.0f;
 	m_CameraRotPosX = 0.0f;
+
+	m_LongDistanceFlag = true;
+	m_DistanceTime = 1.0f;
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cCameraManager::~cCameraManager()
 {
 	delete m_LuaAct;
 }
 
+/// <summary>
+/// 古いデータからポップすることで遅延カメラを制御する
+/// </summary>
+/// <param name="pCamera">データを格納するアドレス</param>
+/// <returns></returns>
 DirectX::XMFLOAT3 cCameraManager::PopCameraPos(cCamera* pCamera)
 {
 	XMFLOAT3 ret = m_PlayerPosArry.front();
-	ret.y += 1.0f;
+	float t = m_DistanceTime;
+	t = t * t * (3 - 2 * t);
+	ret.y += 1.0f + ((1.0f - t) * 0.7f);	//近距離の時は高さを上げる
 	pCamera->SetLookPoint(ret);
 	if (m_PlayerPosArry.size() == m_DelayNum)
 		m_PlayerPosArry.pop_front();
@@ -43,6 +67,9 @@ DirectX::XMFLOAT3 cCameraManager::PopCameraPos(cCamera* pCamera)
 	return ret;
 }
 
+/// <summary>
+/// カメラアップデート
+/// </summary>
 void cCameraManager::Update()
 {
 	//右スティックの情報を取得してカメラの回転を行う
@@ -71,8 +98,15 @@ void cCameraManager::Update()
 
 
 	SpeedAdjustment();	//速度調整
+
+	if (GetGamePad->Trigger(XINPUT_GAMEPAD_Y))
+		m_LongDistanceFlag = !m_LongDistanceFlag;
 }
 
+/// <summary>
+/// プレイヤーの位置を設定する
+/// </summary>
+/// <param name="pos"></param>
 void cCameraManager::SetPlayerPos(DirectX::XMFLOAT3 pos)
 {
 	m_PlayerPosArry.push_back(pos);
@@ -86,6 +120,9 @@ void cCameraManager::CameraParamUpdate()
 	// オフセット値を取得
 	m_LuaAct->CallFunc("Offset", 3);
 	m_CameraOffset = { m_LuaAct->m_Ret.GetNumber(0) ,m_LuaAct->m_Ret.GetNumber(1) ,m_LuaAct->m_Ret.GetNumber(2) };
+
+	m_LuaAct->CallFunc("ShortOffset", 3);
+	m_CameraShortOffset = { m_LuaAct->m_Ret.GetNumber(0) ,m_LuaAct->m_Ret.GetNumber(1) ,m_LuaAct->m_Ret.GetNumber(2) };
 
 	m_LuaAct->CallFunc("CameraDelay", 1);
 	m_DelayNum = (int)m_LuaAct->m_Ret.GetNumber(0);
@@ -121,10 +158,15 @@ void cCameraManager::SpeedAdjustment()
 	if (fabs(m_NowCameraSpeedX) < 0.01f) m_NowCameraSpeedX = 0.0f;
 }
 
+/// <summary>
+/// 位置を補正する計算を行う
+/// </summary>
+/// <param name="playerPos"></param>
+/// <returns></returns>
 DirectX::XMFLOAT3 cCameraManager::CoordinateCalculation(DirectX::XMFLOAT3 playerPos)
 {
 	//オフセット値を回転情報を元に回転させたものをプレイヤー座標に足しこむ
-	XMVECTOR cameraPos = XMLoadFloat3(&m_CameraOffset);
+	XMVECTOR cameraPos = XMLoadFloat3(&OffsetLinear());
 	m_CameraRotPosY += XMConvertToRadians(m_NowCameraSpeedY);
 	m_CameraRotPosX += XMConvertToRadians(m_NowCameraSpeedX);
 
@@ -138,4 +180,36 @@ DirectX::XMFLOAT3 cCameraManager::CoordinateCalculation(DirectX::XMFLOAT3 player
 	XMStoreFloat3(&_Camera, cameraPos);
 
 	return XMFLOAT3(_Camera.x + playerPos.x, _Camera.y + playerPos.y, _Camera.z + playerPos.z);
+}
+
+/// <summary>
+/// カメラのオフセット値を返す関数
+/// </summary>
+/// <returns></returns>
+XMFLOAT3 cCameraManager::OffsetLinear()
+{
+	//現在、カメラが近距離なのか遠距離なのかを判定して線形補間する
+
+	//現在、遠距離モードである
+	if (m_LongDistanceFlag) {
+		m_DistanceTime += 0.03f;
+		if (m_DistanceTime >= 1.0f) m_DistanceTime = 1.0f;
+	}
+	else {
+		m_DistanceTime -= 0.03f;
+		if (m_DistanceTime < 0.0f) m_DistanceTime = 0.0f;
+	}
+
+	float t = m_DistanceTime;
+	t = t * t * (3 - 2 * t);
+
+	XMVECTOR v1 = XMLoadFloat3(&m_CameraShortOffset);
+	XMVECTOR v2 = XMLoadFloat3(&m_CameraOffset);
+
+	XMVECTOR dest = XMVectorLerp(v1, v2, t);
+	XMFLOAT3 ret;
+
+	XMStoreFloat3(&ret, dest);
+
+	return ret;
 }

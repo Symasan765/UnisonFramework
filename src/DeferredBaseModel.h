@@ -23,7 +23,7 @@ public:
 	cDeferredModel();
 	~cDeferredModel() = default;
 	void LoadData(std::string _fileName, int _type);	//typeはShaderTypeをビット演算する
-	void DrawMesh(int _anmNo = 0, const int _time = 0);
+	void DrawMesh(int _anmNo = 0, const float _time = 0);
 	void SetEmission(DirectX::XMFLOAT4 _color);	//自発光色を設定する
 	void SetShaderType(int _type);	//typeはShaderTypeをビット演算するといい
 	void LoadTessellation(std::string _FileName);

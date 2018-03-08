@@ -31,11 +31,18 @@ cBillBoard::cBillBoard(std::string _fileName)
 	LoadData(_fileName);
 }
 
+/// <summary>
+/// ビルボードに使用する画像ファイルの読み込みを行う
+/// </summary>
+/// <param name="_fileName">ファイルネーム。テクスチャフォルダまでのパスは自動で付与される</param>
 void cBillBoard::LoadData(std::string _fileName)
 {
 	m_pTex = cTexManager::GetInstance().LoadTexData(_fileName);
 }
 
+/// <summary>
+/// 描画関数
+/// </summary>
 void cBillBoard::Draw()
 {
 	//m_pMesh->Draw();		//標準の描画使うとシェーダセットが出来ないから使わない方向かな…？
@@ -62,11 +69,19 @@ void cBillBoard::Draw()
 
 }
 
+/// <summary>
+/// 自発光情報を付与する
+/// </summary>
+/// <param name="_color">光らせる色情報</param>
 void cBillBoard::SetEmission(DirectX::XMFLOAT4 _color)
 {
 	m_Constant.SetEmission(_color);
 }
 
+/// <summary>
+/// ビルボード用の頂点情報を定義する
+/// </summary>
+/// <returns></returns>
 HRESULT cBillBoard::CreateVertexBuf()
 {
 	const float max = 1.0f;
@@ -98,6 +113,9 @@ HRESULT cBillBoard::CreateVertexBuf()
 		return DXTRACE_ERR("InitDirect3D g_pD3DDevice->CreateBuffer", hr);
 }
 
+/// <summary>
+/// ビルボード定数をシェーダに設定する
+/// </summary>
 void cBillBoard::SetConstant()
 {
 	//ビルボードのためのワールド行列を作成する

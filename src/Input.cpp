@@ -36,6 +36,9 @@ namespace {
 }
 using namespace Input;
 
+/// <summary>
+/// キーボード情報を初期化
+/// </summary>
 cKeyboard::cKeyboard() {
 	HRESULT hr;
 	if (!pDInput)
@@ -47,6 +50,12 @@ cKeyboard::cKeyboard() {
 	InitKeyboard(GetDirectX::HInstance(), GetDirectX::Hwnd());
 }
 
+/// <summary>
+/// キーボード情報を初期化し、システムから利用できるようにする
+/// </summary>
+/// <param name="hInst"></param>
+/// <param name="hWnd"></param>
+/// <returns></returns>
 HRESULT cKeyboard::InitKeyboard(HINSTANCE hInst, HWND hWnd) {
 	HRESULT hr = 0;
 
@@ -80,6 +89,10 @@ HRESULT cKeyboard::InitKeyboard(HINSTANCE hInst, HWND hWnd) {
 	return S_OK;
 }
 
+/// <summary>
+/// キーの更新を行う。ループの最初に行うといい
+/// </summary>
+/// <returns></returns>
 HRESULT cKeyboard::UpdateKeyboard(void) {
 	HRESULT hr;
 	BYTE keyStateOld[256];
@@ -130,6 +143,9 @@ HRESULT cKeyboard::UpdateKeyboard(void) {
 	return hr;
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 void cKeyboard::UninitKeyboard(void) {
 	if (pDIDevKeyboard)
 	{
@@ -140,6 +156,9 @@ void cKeyboard::UninitKeyboard(void) {
 	}
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cKeyboard::~cKeyboard() {
 	// キーボードの終了処理
 	UninitKeyboard();
@@ -150,20 +169,40 @@ cKeyboard::~cKeyboard() {
 	}
 }
 
+/// <summary>
+/// 特定のキーが押されているか判定する
+/// </summary>
+/// <param name="key"></param>
+/// <returns></returns>
 bool cKeyboard::Press(int key) {
 	return ((keyState[key] & 0x80) != 0);
 }
 
+/// <summary>
+/// 特定のキーが押された瞬間か判定する
+/// </summary>
+/// <param name="key"></param>
+/// <returns></returns>
 bool cKeyboard::Trigger(int key) {
 	return ((keyStateTrigger[key] & 0x80) != 0);
 }
 
+/// <summary>
+/// 特定のキーが離された瞬間か判定する
+/// </summary>
+/// <param name="key"></param>
+/// <returns></returns>
 bool Input::cKeyboard::Release(int key)
 {
 	return (keyStateRelease[key]);
 }
 
-
+/// <summary>
+/// 特定のゲームパッドボタンが押されたか判定する
+/// </summary>
+/// <param name="key"></param>
+/// <param name="no"></param>
+/// <returns></returns>
 bool XInput::Press(const int key, const DWORD no) const
 {
 	if (conect[no]) {
@@ -178,6 +217,12 @@ bool XInput::Press(const int key, const DWORD no) const
 	return false;
 }
 
+/// <summary>
+/// 特定のゲームパッドボタンが押された瞬間か判定する
+/// </summary>
+/// <param name="key"></param>
+/// <param name="no"></param>
+/// <returns></returns>
 bool Input::XInput::Trigger(const int key, const DWORD no) const
 {
 	if (conect[no]) {
@@ -195,6 +240,12 @@ bool Input::XInput::Trigger(const int key, const DWORD no) const
 	return false;
 }
 
+/// <summary>
+/// 特定のゲームパッドボタンが離された瞬間か判定する
+/// </summary>
+/// <param name="key"></param>
+/// <param name="no"></param>
+/// <returns></returns>
 bool Input::XInput::Release(const int key, const DWORD no) const
 {
 	if (conect[no]) {
@@ -212,6 +263,11 @@ bool Input::XInput::Release(const int key, const DWORD no) const
 	return false;
 }
 
+/// <summary>
+/// レフトトリガーの入力情報を取得する
+/// </summary>
+/// <param name="no"></param>
+/// <returns>押し込み具合(0.0 ~ 1.0)</returns>
 float Input::XInput::LeftTrigger(const DWORD no) const
 {
 	if (conect[no]) {
@@ -227,6 +283,11 @@ float Input::XInput::LeftTrigger(const DWORD no) const
 	return 0.0f;
 }
 
+/// <summary>
+/// ライトトリガーの入力情報を取得する
+/// </summary>
+/// <param name="no"></param>
+/// <returns>押し込み具合(0.0 ~ 1.0)</returns>
 float Input::XInput::RightTrigger(const DWORD no) const
 {
 	if (conect[no]) {
@@ -242,6 +303,11 @@ float Input::XInput::RightTrigger(const DWORD no) const
 	return 0.0f;
 }
 
+/// <summary>
+/// 左スティックの入力情報を取得する
+/// </summary>
+/// <param name="no"></param>
+/// <returns>倒され具合(0.0 ~ 1.0)</returns>
 DirectX::XMFLOAT2 Input::XInput::LeftStick(const DWORD no) const
 {
 	DirectX::XMFLOAT2 judge{ 0 , 0 };
@@ -269,6 +335,11 @@ DirectX::XMFLOAT2 Input::XInput::LeftStick(const DWORD no) const
 	return judge;
 }
 
+/// <summary>
+/// 右スティックの入力情報を取得する
+/// </summary>
+/// <param name="no"></param>
+/// <returns>倒され具合(0.0 ~ 1.0)</returns>
 DirectX::XMFLOAT2 Input::XInput::RightStick(const DWORD no) const
 {
 	DirectX::XMFLOAT2 judge{ 0 , 0 };
@@ -295,6 +366,9 @@ DirectX::XMFLOAT2 Input::XInput::RightStick(const DWORD no) const
 	return judge;
 }
 
+/// <summary>
+/// キー情報の更新を行う。ループの最初に一度行うと良い。
+/// </summary>
 void XInput::UpdateGamePad(void)
 {
 	//ステートとストロークを取得する
@@ -334,6 +408,11 @@ void XInput::UpdateGamePad(void)
 	}
 }
 
+/// <summary>
+/// キー入力をLuaに付与する
+/// </summary>
+/// <param name="L"></param>
+/// <param name="LuaVarName"></param>
 void Input::XInput::AddFunctionToLua(lua_State * L, std::string LuaVarName)
 {
 	//関数の登録を行う
@@ -375,6 +454,11 @@ void Input::XInput::AddFunctionToLua(lua_State * L, std::string LuaVarName)
 	}
 }
 
+/// <summary>
+/// ゲームパッドが存在しない場合にキー情報をキーボードに割り当てる
+/// </summary>
+/// <param name="key"></param>
+/// <returns></returns>
 unsigned Input::XInput::ConvertKeyboardToGamePad(unsigned key)
 {
 	unsigned type = 0;
@@ -420,12 +504,15 @@ unsigned Input::XInput::ConvertKeyboardToGamePad(unsigned key)
 		type = DIK_LEFT;
 		break;
 	case XINPUT_GAMEPAD_Y:
-		type = DIK_UP;
+		type = DIK_5;
 		break;
 	}
 
 	return type;
 }
+
+
+//=========================Luaで利用するためにGlue関数群===========================//
 
 int Input::XInput::PressGlue(lua_State * L)
 {

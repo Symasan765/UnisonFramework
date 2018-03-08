@@ -246,6 +246,8 @@ void cCamera::FreeCameraOperation()
 #endif
 }
 
+
+// =================カメラをLuaから使用するためのGlue関数群==================== //
 int cCamera::VectMoveGlue(lua_State * L)
 {
 	//テーブルからアドレスを持ってくる
@@ -369,6 +371,11 @@ void cCamera::SetCameraAllData(const CameraData & _data)
 	m_DebugCameraData = _data;
 }
 
+/// <summary>
+/// Near、Far情報を設定する
+/// </summary>
+/// <param name="Near"></param>
+/// <param name="Far"></param>
 void cCamera::SetNear(const float Near, const float Far)
 {
 	m_CameraData.vNear = Near;
@@ -378,7 +385,11 @@ void cCamera::SetNear(const float Near, const float Far)
 	m_DebugCameraData.vFar = Far;
 }
 
-
+/// <summary>
+/// 定数情報をシェーダにセットする
+/// </summary>
+/// <param name="pass"></param>
+/// <param name="debugFlag"></param>
 void cCamera::SetConstBuffer(const int pass, bool debugFlag)
 {
 	if (debugFlag) {
@@ -390,6 +401,11 @@ void cCamera::SetConstBuffer(const int pass, bool debugFlag)
 	m_ShaderConst.Set(pass);
 }
 
+/// <summary>
+/// カメラデータを取得する
+/// </summary>
+/// <param name="_FreeCameraFlag"></param>
+/// <returns></returns>
 CameraData cCamera::GetCameraData(bool _FreeCameraFlag)
 {
 	if (!_FreeCameraFlag) {
@@ -400,6 +416,11 @@ CameraData cCamera::GetCameraData(bool _FreeCameraFlag)
 	}
 }
 
+/// <summary>
+/// ビュープロジェクション情報を取得する
+/// </summary>
+/// <param name="_FreeCameraFlag"></param>
+/// <returns></returns>
 ViewProj cCamera::GetViewProj(bool _FreeCameraFlag)
 {
 	if (!_FreeCameraFlag) {
@@ -408,6 +429,10 @@ ViewProj cCamera::GetViewProj(bool _FreeCameraFlag)
 		return m_DebugVP;
 }
 
+/// <summary>
+/// 向いている方向に移動させる
+/// </summary>
+/// <param name="rate">移動量</param>
 void cCamera::VectMove(const float rate)
 {
 	const XMFLOAT3& _VecZ = GetAxisZ();
@@ -422,6 +447,12 @@ void cCamera::VectMove(const float rate)
 	m_CameraData.vLook.z += _VecZ.z * rate;
 }
 
+/// <summary>
+/// 見ている位置を回転させる
+/// </summary>
+/// <param name="rotX"></param>
+/// <param name="rotY"></param>
+/// <param name="rotZ"></param>
 void cCamera::LookPointRotate(const float rotX, const float rotY, const float rotZ)
 {
 	//回転は注視点を変更することで行う
@@ -464,6 +495,10 @@ void cCamera::LookPointRotate(const float rotX, const float rotY, const float ro
 	XMStoreFloat3(&m_CameraData.vLook, Vec);
 }
 
+/// <summary>
+/// カメラが向いている方向を取得する
+/// </summary>
+/// <returns></returns>
 const DirectX::XMFLOAT3 cCamera::GetAxisZ() const
 {
 	//方向ベクトルを算出する
@@ -479,6 +514,11 @@ const DirectX::XMFLOAT3 cCamera::GetAxisZ() const
 	return _VecZ;
 }
 
+/// <summary>
+/// Luaにカメラ情報を付与する
+/// </summary>
+/// <param name="L"></param>
+/// <param name="LuaVarName"></param>
 void cCamera::AddFunctionToLua(lua_State * L, std::string LuaVarName)
 {
 	const luaL_Reg funcs[] = {

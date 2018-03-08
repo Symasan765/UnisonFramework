@@ -18,9 +18,11 @@ private:
 	void CameraParamUpdate();
 	void SpeedAdjustment();
 	DirectX::XMFLOAT3 CoordinateCalculation(DirectX::XMFLOAT3 playerPos);
+	DirectX::XMFLOAT3 OffsetLinear();
 
 	std::deque<DirectX::XMFLOAT3> m_PlayerPosArry;	//プレイヤーの座標を溜めていく
 	DirectX::XMFLOAT3 m_CameraOffset;
+	DirectX::XMFLOAT3 m_CameraShortOffset;
 	cLuaActor* m_LuaAct;
 	int m_DelayNum;		//カメラの遅延数
 
@@ -44,4 +46,7 @@ private:
 
 	float m_LimitRotXAngle;
 	float m_DownLimitX;
+
+	float m_DistanceTime;		//遠距離から近距離に移っている比率(1.0なら遠距離)
+	bool m_LongDistanceFlag;	//遠距離フラグ
 };

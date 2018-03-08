@@ -70,7 +70,7 @@ public:
 	cAnimationData();
 	~cAnimationData();
 	bool ToAnimetion(int _AnimeNo);
-	void SetBoneConst(int _AnimeNo,int _Time);			//ボーン情報を定数バッファにセットする
+	void SetBoneConst(int _AnimeNo,float _Time);			//ボーン情報を定数バッファにセットする
 private:
 	MotionData* m_pMotion;		//動作分のモーションを保持する
 	int m_MotionNum;				//モーション数

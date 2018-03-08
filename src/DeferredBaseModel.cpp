@@ -11,6 +11,9 @@ using namespace LuaConv;
 
 bool cDeferredModel::m_DefaultRenderFlag = false;
 
+/// <summary>
+/// 初期化
+/// </summary>
 cDeferredModel::cDeferredModel()
 {
 	//初期化処理
@@ -19,6 +22,11 @@ cDeferredModel::cDeferredModel()
 	m_pTesse = nullptr;
 }
 
+/// <summary>
+/// メッシュデータをロードする
+/// </summary>
+/// <param name="_fileName"></param>
+/// <param name="_type"></param>
 void cDeferredModel::LoadData(std::string _fileName, int _type)
 {
 	//メッシュとシェーダをロードする
@@ -26,7 +34,12 @@ void cDeferredModel::LoadData(std::string _fileName, int _type)
 	m_ShaderType = _type;		//渡された値を整数値として保存
 }
 
-void cDeferredModel::DrawMesh(int _anmNo, const int _time)
+/// <summary>
+/// メッシュデータを描画する
+/// </summary>
+/// <param name="_anmNo"></param>
+/// <param name="_time"></param>
+void cDeferredModel::DrawMesh(int _anmNo, const float _time)
 {
 	//m_pMesh->Draw();		//標準の描画使うとシェーダセットが出来ないから使わない方向かな…？
 
@@ -93,6 +106,10 @@ void cDeferredModel::DrawMesh(int _anmNo, const int _time)
 	cTessellationManager::GetInstance().SetTessellationToNull();
 }
 
+/// <summary>
+/// 自発光情報セット
+/// </summary>
+/// <param name="_color"></param>
 void cDeferredModel::SetEmission(DirectX::XMFLOAT4 _color)
 {
 	m_Constant.SetEmission(_color);
@@ -103,6 +120,10 @@ void cDeferredModel::SetShaderType(int _type)
 	m_ShaderType = _type;		//渡された値を整数値として保存
 }
 
+/// <summary>
+/// テッセレーションステージを使用する場合追加で読み込む
+/// </summary>
+/// <param name="_FileName"></param>
 void cDeferredModel::LoadTessellation(std::string _FileName)
 {
 	m_pTesse = cTessellationManager::GetInstance().LoadTessellationData(_FileName);
@@ -118,6 +139,11 @@ void cDeferredModel::DefaultRenderFlag(bool flag)
 	m_DefaultRenderFlag = flag;
 }
 
+/// <summary>
+/// Luaにバインドする
+/// </summary>
+/// <param name="L"></param>
+/// <param name="LuaVarName"></param>
 void cDeferredModel::AddFunctionToLua(lua_State * L, std::string LuaVarName)
 {
 	const luaL_Reg funcs[] = {
@@ -136,6 +162,9 @@ void cDeferredModel::AddFunctionToLua(lua_State * L, std::string LuaVarName)
 	SetLuaGlobalObjct<cDeferredModel>(L, LuaVarName.c_str(), funcs, this);
 }
 
+/// <summary>
+/// 定数をシェーダにセットする
+/// </summary>
 void cDeferredModel::SetConstant()
 {
 	//ワールド行列を保存
@@ -144,6 +173,11 @@ void cDeferredModel::SetConstant()
 	m_Constant.SetShader();
 }
 
+/// <summary>
+/// Luaを使用するためのGlue関数
+/// </summary>
+/// <param name="L"></param>
+/// <returns></returns>
 int cDeferredModel::DrawGlue(lua_State * L)
 {
 	//テーブルからアドレスを持ってくる

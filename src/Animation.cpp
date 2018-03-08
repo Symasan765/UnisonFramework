@@ -58,7 +58,7 @@ bool cAnimationData::ToAnimetion(int _AnimeNo)
 /// </summary>
 /// <param name="_AnimeNo"></param>
 /// <param name="_Time"></param>
-void cAnimationData::SetBoneConst(int _AnimeNo, int _Time)
+void cAnimationData::SetBoneConst(int _AnimeNo, float _Time)
 {
 	//必要な処理はそれぞれの行列情報とアニメーションの最終補間姿勢
 	//再生するアニメーションの中の動かすボーン分だけ処理する
@@ -67,7 +67,9 @@ void cAnimationData::SetBoneConst(int _AnimeNo, int _Time)
 		int Suf = 0;		//どこの添え字番号のところが最終座標か
 		int MaxKey = m_pMotion[_AnimeNo].vBoneAnime[0].vKeyNum;
 		//まずは時間情報を範囲内に収める
-		_Time %= m_pMotion[_AnimeNo].vBoneAnime[0].vpKeyFrame[MaxKey - 1].vTime;
+		float timeBuf = _Time;
+		timeBuf = (int)(timeBuf / m_pMotion[_AnimeNo].vBoneAnime[0].vpKeyFrame[MaxKey - 1].vTime);
+		_Time = _Time - (timeBuf * m_pMotion[_AnimeNo].vBoneAnime[0].vpKeyFrame[MaxKey - 1].vTime);
 		bool KeyTimeFindFlag = false;		//キーフレームを見つけたかのフラグ
 		for (int i = 0; i < MaxKey; i++) {
 			//今からモーションするフレームの中からタイムが近いものを探し出す

@@ -12,6 +12,10 @@ ID3D11Buffer* cPostEffects::vVertexBuf = nullptr;			//頂点バッファ
 ID3D11SamplerState* cPostEffects::m_pSampleLinear = nullptr;
 ID3D11SamplerState* cPostEffects::m_pSamplePoint = nullptr;
 
+/// <summary>
+/// ポストエフェクトに使用する情報をプログラム開始後、一度だけ設定する
+/// </summary>
+/// <param name="_fileName"></param>
 cPostEffects::cPostEffects(std::string _fileName)
 {
 	//まだ一度も読み込まれていない
@@ -21,10 +25,18 @@ cPostEffects::cPostEffects(std::string _fileName)
 	m_Shader = SHADER::GetInstance()->LoadShaderFile(_fileName, inPOSITION | inTEX_UV, false);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cPostEffects::~cPostEffects()
 {
 }
 
+/// <summary>
+/// 指定したサンプラをセットする
+/// </summary>
+/// <param name="slot"></param>
+/// <param name="flag"></param>
 void cPostEffects::SetTexSamplerState(const int slot, Sampler flag)
 {
 	ID3D11SamplerState** samp = nullptr;
@@ -44,6 +56,11 @@ void cPostEffects::SetTexSamplerState(const int slot, Sampler flag)
 	GetDirectX::Context()->PSSetSamplers(slot, 1, samp);
 }
 
+/// <summary>
+/// 描画
+/// </summary>
+/// <param name="_tex"></param>
+/// <param name="_ResourceNum"></param>
 void cPostEffects::Draw(ID3D11ShaderResourceView** _tex, int _ResourceNum)
 {
 	//まずは変換行列を作成する
@@ -98,6 +115,9 @@ void cPostEffects::Draw(ID3D11ShaderResourceView** _tex, int _ResourceNum)
 	GetDirectX::Context()->Draw(4, 0);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 void cPostEffects::Destroy()
 {
 	SAFE_RELEASE(vVertexBuf);
@@ -105,12 +125,18 @@ void cPostEffects::Destroy()
 	SAFE_RELEASE(m_pSamplePoint);
 }
 
+/// <summary>
+/// シェーダと定数をセット
+/// </summary>
 void cPostEffects::SetShader()
 {
 	m_Shader->Set();
 	m_ShaderConst.Set(0);		//定数をシェーダにセットする
 }
 
+/// <summary>
+/// プログラム開始後、一度だけ設定
+/// </summary>
 void cPostEffects::Create()
 {
 	CreateVertex();
@@ -131,6 +157,10 @@ void cPostEffects::Create()
 	GetDirectX::Device()->CreateSamplerState(&SamDesc, &m_pSamplePoint);
 }
 
+/// <summary>
+/// 頂点情報を取得
+/// </summary>
+/// <returns></returns>
 HRESULT cPostEffects::CreateVertex()
 {
 	if (true) {

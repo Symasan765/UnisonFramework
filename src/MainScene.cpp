@@ -28,6 +28,8 @@ cMainScene::~cMainScene()
 {
 	delete m_pGround;
 	delete m_pPlayer;
+	delete m_BackGround;
+	delete m_CameraManager;
 }
 
 void cMainScene::Update()

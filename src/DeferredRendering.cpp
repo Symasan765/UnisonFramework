@@ -9,6 +9,11 @@
 #include "DirectX11.h"
 
 using namespace DirectX;
+
+/// <summary>
+/// ディファードレンダリング描画前の設定を行う
+/// </summary>
+/// <param name="_DepthMap">シャドウマップ用に作成されたライト位置からの深度マップ</param>
 void cDeferredRendering::SetDeferredRendering(ID3D11ShaderResourceView* _DepthMap)
 {
 	RTTex Target[TARGET_MAX];
@@ -41,11 +46,20 @@ void cDeferredRendering::SetDeferredRendering(ID3D11ShaderResourceView* _DepthMa
 	GetDirectX::Context()->PSSetShaderResources(4, 1, &_DepthMap);
 }
 
+/// <summary>
+/// G-Bufferの情報を個別に取得する
+/// </summary>
+/// <param name="_no"></param>
+/// <returns></returns>
 ID3D11ShaderResourceView * cDeferredRendering::GetResourceView(int _no)
 {
 	return m_pRenderTergetTex[_no].GetTextureResourceView();
 }
 
+/// <summary>
+/// G-Bufferの情報をまとめて取得する
+/// </summary>
+/// <returns></returns>
 GBuffer cDeferredRendering::GetGraphicBuffer()
 {
 	GetDirectX::Context()->PSSetShaderResources(0, NULL, NULL);
@@ -60,6 +74,9 @@ GBuffer cDeferredRendering::GetGraphicBuffer()
 	return buf;
 }
 
+/// <summary>
+/// シェーダを設定する
+/// </summary>
 void cDeferredRendering::SetDeferredShader()
 {
 	m_Shader->Set();
@@ -75,6 +92,9 @@ EMISSION,			//自発光
 SHADOW_MAP,		//シャドウマップ
 TARGET_MAX		//作成テクスチャ数
 */
+/// <summary>
+/// ディファードレンダリングの初期化
+/// </summary>
 cDeferredRendering::cDeferredRendering()
 {
 	m_pRenderTergetTex = new cRenderTargetTex[TARGET_MAX];
@@ -112,6 +132,9 @@ cDeferredRendering::cDeferredRendering()
 	m_Shader = SHADER::GetInstance()->LoadShaderFile("Deferred1.hlsl", inPOSITION | inNORMAL | inTEX_UV | inBone | inWeight,true);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cDeferredRendering::~cDeferredRendering()
 {
 	delete[] m_pRenderTergetTex;

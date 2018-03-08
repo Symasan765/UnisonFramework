@@ -1,6 +1,9 @@
 #include "SkyDome.h"
 #include "WinMain.h"
 
+/// <summary>
+/// スカイドーム情報を初期化する
+/// </summary>
 cSkyDome::cSkyDome()
 {
 	m_SkyDome = new cDeferredModel;
@@ -34,12 +37,19 @@ cSkyDome::cSkyDome()
 		&m_pDepthStencilState);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cSkyDome::~cSkyDome()
 {
 	delete m_SkyDome;
 	SAFE_RELEASE(m_pDepthStencilState);
 }
 
+/// <summary>
+/// スカイドームを描画する
+/// </summary>
+/// <param name="camera"></param>
 void cSkyDome::DrawSkyDome(CameraData camera)
 {
 	m_SkyDome->SetTrans(camera.vPos);

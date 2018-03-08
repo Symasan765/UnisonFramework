@@ -2,6 +2,9 @@
 #include <fstream>
 using namespace std;
 
+/// <summary>
+/// 背景オブジェクトのロードを行う初期化処理
+/// </summary>
 cBacGroundModel::cBacGroundModel()
 {
 	m_Models = new cDeferredModel[2];
@@ -18,12 +21,18 @@ cBacGroundModel::cBacGroundModel()
 	m_Models[1].LoadData("box.x", 0);
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cBacGroundModel::~cBacGroundModel()
 {
 	delete[] m_Models;
 	delete m_LuaAct;
 }
 
+/// <summary>
+/// 描画
+/// </summary>
 void cBacGroundModel::Draw()
 {
 	//m_LuaAct->CallFunc("CityDraw");
@@ -47,6 +56,9 @@ void cBacGroundModel::Draw()
 	m_Models[1].DrawMesh();
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void cBacGroundModel::Update()
 {
 	

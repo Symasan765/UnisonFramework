@@ -166,9 +166,9 @@ PS_OUTPUT PS(PS_INPUT In)
 		Out.vColor = g_LightingShadowTex.Sample(g_samLinear, In.UV);  //シャドウ部
 	}
 
-	Out.vBright = Out.vColor;
-	Out.vBright.xyz *= 0.3f;
-	Out.vBright.a *= deif;
+	//Out.vBright = Out.vColor;
+	//Out.vBright.xyz *= 0.3f;
+	//Out.vBright.a *= deif;
 
 	//スクリーンスペースサブサーフェススキャッタリングのディフューズ情報を入れる。wにはマスクを入れたのでこれでSSSSS部のディフューズだけ取り出せる
 	Out.vScreenSpaceSSS.xyz = Out.vScreenSpaceSSS.w * Out.vColor.xyz;

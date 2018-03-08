@@ -13,10 +13,19 @@ end
 function Offset()
     -- オフセットの値
     local x = 0.0
-    local y = 3.0
+    local y = 1.5
     local z = -4.0
 
     return x,y,z
+end
+
+function ShortOffset()
+    -- オフセットの値
+    local sx = 0.0
+    local sy = 0.5
+    local sz = -1.5
+
+    return sx,sy,sz
 end
 
 function MaxRotetAngle()
@@ -41,6 +50,6 @@ end
 
 function RotAngleLimit()
     local limitX = 22.0
-    local DownX = -34.0
+    local DownX = -24.0
     return limitX , DownX
 end

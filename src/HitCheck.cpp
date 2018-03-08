@@ -10,6 +10,14 @@
 
 using namespace DirectX;
 
+/// <summary>
+/// ‹…“¯m‚Ì“–‚½‚è”»’è
+/// </summary>
+/// <param name="p1">‹…1À•W</param>
+/// <param name="r1">”¼Œa‚P</param>
+/// <param name="p2">‹…‚QÀ•W</param>
+/// <param name="r2">”¼Œa‚Q</param>
+/// <returns>“–‚½‚Á‚Ä‚¢‚é‚©H</returns>
 bool HitCheck::HitCheckSphere(const DirectX::XMFLOAT3 & p1, const float r1, const DirectX::XMFLOAT3 & p2, const float r2)
 {
 	//“–‚½‚è”»’è‚¾‚¯‚È‚Ì‚Å³Šm‚È‹——£‚ğ‘ª‚ésqrtf‚ÍœŠO‚·‚é

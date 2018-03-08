@@ -9,6 +9,15 @@
 
 int cComboBox::m_WindowNo = 1;
 
+/// <summary>
+/// コンボボックスの初期化を行う
+/// </summary>
+/// <param name="hwnd">ウィンドウハンドラ</param>
+/// <param name="lp"></param>
+/// <param name="posX">座標X</param>
+/// <param name="posY">座標Y</param>
+/// <param name="width">横幅</param>
+/// <param name="height">縦幅</param>
 cComboBox::cComboBox(HWND hwnd, LPARAM lp, int posX, int posY, int width, int height)
 {
 	m_Combo = CreateWindow(
@@ -23,6 +32,9 @@ cComboBox::cComboBox(HWND hwnd, LPARAM lp, int posX, int posY, int width, int he
 	Hide();
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cComboBox::~cComboBox()
 {
 	delete[] pszBuf;
@@ -31,12 +43,18 @@ cComboBox::~cComboBox()
 	Hide();		//おやウィンドウが破棄されれば問題ないのでとりあえず非表示にだけしておく
 }
 
+/// <summary>
+/// 表示
+/// </summary>
 void cComboBox::display()
 {
 		ShowWindow(m_Combo, SW_SHOWNORMAL);
 		m_DispFlag = true;
 }
 
+/// <summary>
+/// 活性化
+/// </summary>
 void cComboBox::Hide()
 {
 	if (m_DispFlag == true) {
@@ -45,6 +63,11 @@ void cComboBox::Hide()
 	}
 }
 
+/// <summary>
+/// 選択されたアイテム名を取得する
+/// </summary>
+/// <param name="hwnd"></param>
+/// <returns>選択されクリックされた項目の名前を返却</returns>
 std::string cComboBox::GetSelectItem(HWND hwnd)
 {
 	//選択中のインデックス取得
@@ -66,6 +89,9 @@ std::string cComboBox::GetSelectItem(HWND hwnd)
 	return std::string("err");
 }
 
+/// <summary>
+/// すべてのアイテムを削除する
+/// </summary>
 void cComboBox::DeleteAllItem()
 {
 	//項目がなくなるまで削除命令を発行する
@@ -75,6 +101,10 @@ void cComboBox::DeleteAllItem()
 	}
 }
 
+/// <summary>
+/// 新しくアイテムをコンボボックスに追加する
+/// </summary>
+/// <param name="_ItemName"></param>
 void cComboBox::AddItem(std::string _ItemName)
 {
 	SendMessage(m_Combo, CB_ADDSTRING, 0, (LPARAM)TEXT(_ItemName.c_str()));

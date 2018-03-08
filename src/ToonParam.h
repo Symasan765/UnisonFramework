@@ -18,7 +18,14 @@ public:
 	void SetLightConstantBuffer(const int PathNo);
 	void SetOutLineConstantBuffer(const int PathNo);
 private:
+	void ToonParamInit();
+	void LightingParamUpdate();
+	void DrawGuidelines();
+	void OutLineUpdate();
 	cConstBuf<ToonLightingStruct> m_LightParam;
 	cConstBuf<OutlineParam> m_OutLineParam;
 	cLuaActor* m_LuaAct;
+
+
+	bool m_GuidelinesFlag;		//パラメータのガイドラインを変更するかどうかのフラグ
 };

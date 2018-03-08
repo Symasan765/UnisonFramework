@@ -12,6 +12,11 @@ namespace {
 	std::string dire = "HLSL/";		//HLSLが格納されるディレクトリ
 }
 
+/// <summary>
+/// テッセレーションステージのシェーダを読み込む
+/// </summary>
+/// <param name="_FileName"></param>
+/// <returns></returns>
 std::shared_ptr<TessellationStruct> cTessellationManager::LoadTessellationData(std::string _FileName)
 {
 	std::string path = dire + _FileName;
@@ -42,6 +47,11 @@ void cTessellationManager::SetTessellationToNull()
 	GetDirectX::Context()->DSSetShader(NULL, NULL, 0);
 }
 
+/// <summary>
+/// シェーダのリロードを行う
+/// </summary>
+/// <param name="path"></param>
+/// <returns></returns>
 HRESULT cTessellationManager::ShaderReload(std::string path)
 {
 	auto itr = m_Map.find(path);
@@ -54,6 +64,12 @@ HRESULT cTessellationManager::ShaderReload(std::string path)
 	return S_OK;		//なければ別に問題ない
 }
 
+/// <summary>
+/// シェーダをロードし、取得する
+/// </summary>
+/// <param name="_fileName"></param>
+/// <param name="pTesse"></param>
+/// <returns></returns>
 HRESULT cTessellationManager::GetShader(std::string _fileName, TessellationStruct * pTesse)
 {
 	ID3DBlob *pCompiledShader = nullptr;

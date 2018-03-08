@@ -2,6 +2,9 @@
 #include "Tessellation.h"
 #include "Shader.h"
 
+/// <summary>
+/// シェーダファイルに変更があったかチェックするクラスの初期化
+/// </summary>
 void cShaderMonitoring::MonitorChanges()
 {
 #if defined(DEBUG) || defined(_DEBUG)
@@ -62,6 +65,10 @@ void cShaderMonitoring::MonitorChanges()
 #endif
 }
 
+/// <summary>
+/// 新しく読み込まれたシェーダのデータを登録しておく
+/// </summary>
+/// <param name="_FileName"></param>
 void cShaderMonitoring::AddFileDate(std::string _FileName)
 {
 #if defined(DEBUG) || defined(_DEBUG)
@@ -99,6 +106,9 @@ void cShaderMonitoring::AddFileDate(std::string _FileName)
 #endif
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cShaderMonitoring::~cShaderMonitoring()
 {
 #if defined(DEBUG) || defined(_DEBUG)
@@ -109,6 +119,11 @@ cShaderMonitoring::~cShaderMonitoring()
 #endif
 }
 
+/// <summary>
+/// ファイルに変更があったかを検出する
+/// </summary>
+/// <param name="fileHnd"></param>
+/// <returns></returns>
 DWORD cShaderMonitoring::GetFileChangeTime(HANDLE fileHnd)
 {
 #if defined(DEBUG) || defined(_DEBUG)

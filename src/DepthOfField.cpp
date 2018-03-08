@@ -1,5 +1,8 @@
 #include "DepthOfField.h"
 
+/// <summary>
+/// ‰Šú‰»
+/// </summary>
 cDepthOfField::cDepthOfField() : cPostEffects("DepthOfField.hlsl")
 {
 	m_GauseBlue = new cGaussBlur;
@@ -10,13 +13,22 @@ cDepthOfField::cDepthOfField() : cPostEffects("DepthOfField.hlsl")
 	m_LuaAct->ScriptCommit();
 }
 
+/// <summary>
+/// ‰ğ•úˆ—
+/// </summary>
 cDepthOfField::~cDepthOfField()
 {
 	delete m_pBufRenderTarget;
 	delete m_GauseBlue;
+	delete m_GauseBlue;
 }
 
-
+/// <summary>
+/// ”íÊŠE[“x•`‰æ
+/// </summary>
+/// <param name="_color"></param>
+/// <param name="_normal"></param>
+/// <param name="data"></param>
 void cDepthOfField::DrawDOF(ID3D11ShaderResourceView * _color,ID3D11ShaderResourceView * _normal, const DoFData& data)
 {
 	m_GauseBlue->DrawGaussBlur(_color);
@@ -35,6 +47,10 @@ void cDepthOfField::DrawDOF(ID3D11ShaderResourceView * _color,ID3D11ShaderResour
 	this->Draw(Tex, 3);
 }
 
+/// <summary>
+/// •`‰æƒf[ƒ^æ“¾
+/// </summary>
+/// <returns></returns>
 ID3D11ShaderResourceView * cDepthOfField::GetResourceView()
 {
 	return m_pBufRenderTarget->GetTextureResourceView();

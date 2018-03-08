@@ -11,6 +11,11 @@
 
 using namespace DirectX;
 
+/// <summary>
+/// ファイルからメッシュ情報を取得する
+/// </summary>
+/// <param name="_fileName">ファイル名。メッシュフォルダまでのパスは自動で付与</param>
+/// <returns>メッシュデータが格納されたシェアードポインタ</returns>
 std::shared_ptr<Mesh3D> MeshManager::LoadMeshData(std::string _fileName){
 	//まずはパスを完成させる
 	int point = (int)_fileName.find(".");		//.を探索して位置を調べる
@@ -45,6 +50,12 @@ std::shared_ptr<Mesh3D> MeshManager::LoadMeshData(std::string _fileName){
 	return m_MeshMap[path];
 }
 
+/// <summary>
+/// ボーン情報をシェーダにセットする
+/// </summary>
+/// <param name="_bone"></param>
+/// <param name="_Num"></param>
+/// <param name="pass"></param>
 void MeshManager::SetBoneConstant(const BoneData* _bone, const int _Num, int pass)
 {
 	DirectX::XMMATRIX Mat[128];	//計算したデータを入れる場所
@@ -81,6 +92,9 @@ void MeshManager::SetBoneConstant(const BoneData* _bone, const int _Num, int pas
 	m_Bone.Set(pass);
 }
 
+/// <summary>
+/// メッシュがすべてのシェアードポインタから削除されていることを確認し、削除する。
+/// </summary>
 void MeshManager::CheckDelete()
 {
 	//map上のすべてのデータを確認してカウンタ数を確認する

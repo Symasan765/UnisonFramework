@@ -16,6 +16,11 @@ namespace {
 	std::string ScriptFileDIrePathName = "Script/";
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="_FileName">ファイル名。フォルダまでのパスは自動で付与</param>
+/// <param name="LibLoadFlag">LuaLibをすべて読み込んでおくかのフラグ</param>
 cLuaActor::cLuaActor(const std::string _FileName, bool LibLoadFlag)
 {
 	m_FileName = _FileName;
@@ -35,6 +40,9 @@ cLuaActor::cLuaActor(const std::string _FileName, bool LibLoadFlag)
 	}
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cLuaActor::~cLuaActor()
 {
 	//マネージャに削除したことを伝える
@@ -42,6 +50,12 @@ cLuaActor::~cLuaActor()
 	Exit();
 }
 
+/// <summary>
+/// 名前を指定して関数を実行する
+/// </summary>
+/// <param name="funcname">関数名</param>
+/// <param name="result_count">戻り値の数</param>
+/// <returns>成功したかどうか</returns>
 bool cLuaActor::CallFunc(std::string funcname, int result_count)
 {
 	int old_top = lua_gettop(m_L);
@@ -70,6 +84,12 @@ bool cLuaActor::CallFunc(std::string funcname, int result_count)
 	return (res_call == 0);	// true : 関数成功
 }
 
+/// <summary>
+/// ファイル自体を実行するがおすすめはしない
+/// </summary>
+/// <param name="path"></param>
+/// <param name="result_count"></param>
+/// <returns></returns>
 bool cLuaActor::DoFile(std::string path,int result_count)
 {
 	int old_top = lua_gettop(m_L);
@@ -100,6 +120,9 @@ bool cLuaActor::DoFile(std::string path,int result_count)
 	return (res_call == 0);
 }
 
+/// <summary>
+/// ここまで読み込んだLuaファイルを確定させる。(これがないとエラー)
+/// </summary>
 void cLuaActor::ScriptCommit()
 {
 	//読み込みのエラーが無くなるまでロード処理を行う
@@ -128,11 +151,18 @@ void cLuaActor::ScriptCommit()
 	lua_settop(m_L, 0);
 }
 
+/// <summary>
+/// コルーチン情報を取得して返却
+/// </summary>
+/// <param name="pCol"></param>
 void cLuaActor::PushCoroutine(cLuaCoroutine * pCol)
 {
 	m_pCoroutines.push_back(pCol);
 }
 
+/// <summary>
+/// スクリプトをリロードする
+/// </summary>
 void cLuaActor::ScriptReload()
 {
 	//まずファイルを読み直してからコルーチンを読み直す
@@ -142,12 +172,20 @@ void cLuaActor::ScriptReload()
 	}
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 void cLuaActor::Exit()
 {
 	lua_close(m_L);
 	m_L = nullptr;
 }
 
+/// <summary>
+/// LuaのErrorを設定する
+/// </summary>
+/// <param name="location"></param>
+/// <param name="message"></param>
 void cLuaActor::SetErr(std::string location, std::string message)
 {
 	m_err = location + message;

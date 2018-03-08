@@ -16,6 +16,13 @@ namespace {
 	std::string DirectoryPath = "HLSL/";
 }
 
+/// <summary>
+/// シェーダファイルをロードし、コンパイルする
+/// </summary>
+/// <param name="_fileName">ファイル名。フォルダまでのパスは自動で付与</param>
+/// <param name="bitFlag"></param>
+/// <param name="_GSflag"></param>
+/// <returns></returns>
 std::shared_ptr<ShaderData> SHADER::LoadShaderFile(std::string _fileName, const short bitFlag, bool _GSflag)
 {
 	//まずそのテクスチャがモデルから読み込まれたのか通常状態で読まれるのかでパスを変更する
@@ -39,6 +46,11 @@ std::shared_ptr<ShaderData> SHADER::LoadShaderFile(std::string _fileName, const 
 	return m_Map[path];		//コピー
 }
 
+/// <summary>
+/// シェーダのリロード処理を行う
+/// </summary>
+/// <param name="path"></param>
+/// <returns></returns>
 HRESULT SHADER::ShaderReload(std::string path)
 {
 	auto itr = m_Map.find(path);
@@ -51,6 +63,14 @@ HRESULT SHADER::ShaderReload(std::string path)
 	return S_OK;		//なければ別に問題ない
 }
 
+/// <summary>
+/// シェーダのロードを行う
+/// </summary>
+/// <param name="_ShaderFileName">ファイルパス</param>
+/// <param name="bitFlag">読み込むシェーダの種類をビット演算で指定する</param>
+/// <param name="_data">格納するポインタ</param>
+/// <param name="_GSflag">ジオメトリシェーダを読み込むフラグ</param>
+/// <returns></returns>
 HRESULT SHADER::LoadShader(std::string _ShaderFileName, const short bitFlag, ShaderData* _data, bool _GSflag)
 {
 	// 頂点シェーダのコードをコンパイル===========================================

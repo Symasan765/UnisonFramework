@@ -12,10 +12,9 @@
 /// <summary>
 /// テクスチャを読み込む時に利用する関数
 /// </summary>
-/// <param name="pDevice"></param>
-/// <param name="_fileName"></param>
-/// <param name="_meshFlag"></param>
-/// <returns></returns>
+/// <param name="_fileName">ファイル名。(フォルダまでのパスは自動で付与する)</param>
+/// <param name="_meshFlag">メッシュに付与するデータなのか？(メッシュのデータの場合、パスが変わる)</param>
+/// <returns>テクスチャを保持したシェアードポインタ</returns>
 std::shared_ptr<Texture2D> cTexManager::LoadTexData(std::string _fileName,bool _meshFlag)
 {
 	//まずそのテクスチャがモデルから読み込まれたのか通常状態で読まれるのかでパスを変更する
@@ -47,9 +46,9 @@ std::shared_ptr<Texture2D> cTexManager::LoadTexData(std::string _fileName,bool _
 /// <summary>
 /// テクスチャサンプラを作ってくれる関数
 /// </summary>
-/// <param name="pDevice"></param>
-/// <param name="m_pSampleLinear"></param>
-/// <returns></returns>
+/// <param name="m_pSampleLinear">出力するためのサンプラステート</param>
+/// <param name="samp">作成するサンプラ種類指定</param>
+/// <returns>成否</returns>
 HRESULT cTexManager::CreateTexSampler(ID3D11SamplerState** m_pSampleLinear, SampleState samp)
 {
 	//テクスチャー用サンプラー作成
@@ -84,10 +83,9 @@ HRESULT cTexManager::CreateTexSampler(ID3D11SamplerState** m_pSampleLinear, Samp
 /// <summary>
 /// 内部で隠蔽されたテクスチャ読み込み部分。LoadTexDataから呼び出される
 /// </summary>
-/// <param name="pDevice"></param>
-/// <param name="_fileName"></param>
-/// <param name="pTex"></param>
-/// <returns></returns>
+/// <param name="_fileName">ファイル名</param>
+/// <param name="pTex">出力するテクスチャ</param>
+/// <returns>成否</returns>
 HRESULT cTexManager::GetTex(std::string _fileName, Texture2D* pTex) {
 
 	if (FAILED(D3DX11CreateShaderResourceViewFromFileA(GetDirectX::Device(), _fileName.c_str(), NULL, NULL, &pTex->vpTexture, NULL))) {

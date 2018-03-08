@@ -4,6 +4,9 @@
 #include <math.h>
 using namespace DirectX;
 
+/// <summary>
+/// プレイヤー情報の初期化
+/// </summary>
 cPlayer::cPlayer()
 {
 	m_ConstScal = 0.025f;
@@ -26,35 +29,60 @@ cPlayer::cPlayer()
 	m_MaxRotatAngle = 0.0f;
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cPlayer::~cPlayer()
 {
 	delete m_LuaScript;
 }
 
+/// <summary>
+/// 描画
+/// </summary>
 void cPlayer::Draw()
 {
-	DrawMesh(0, m_anmCnt);
+	int anmNo = 0;
+	if (m_NowSpeed > 0.02) {
+		anmNo = 1;
+	}
+	DrawMesh(anmNo, m_anmCnt);
 }
 
+/// <summary>
+/// 更新
+/// </summary>
 void cPlayer::Update()
 {
 	PlayerParamUpdate();
 	Move();
-	m_anmCnt++;	//アニメーションのカウントを進めておく
+
+	if (m_NowSpeed > 0.04) {
+		m_anmCnt += (m_NowSpeed / m_MaxDashSpeed);	//アニメーションのカウントを進めておく
+	}
+	else
+		m_anmCnt += 1.0f;	//アニメーションのカウントを進めておく
 
 	PlayerVectChange();
 }
 
+/// <summary>
+/// カメラデータを取得する
+/// </summary>
+/// <param name="data">カメラ情報</param>
 void cPlayer::SetCameraData(ViewProj data)
 {
 	m_CameraData = data;
 }
 
+/// <summary>
+/// プレイヤーのパラメータデータを更新する
+/// </summary>
 void cPlayer::PlayerParamUpdate()
 {
 	m_LuaScript->CallFunc("RetMoveSpeed", 2);
 	m_WalkAddSpeed = m_LuaScript->m_Ret.GetNumber(0);
-	 m_DashAddSpeed = m_LuaScript->m_Ret.GetNumber(1);
+	m_DashAddSpeed = m_LuaScript->m_Ret.GetNumber(1);
 
 	m_LuaScript->CallFunc("Switching", 1);
 	m_Switching = m_LuaScript->m_Ret.GetNumber(0);
@@ -99,7 +127,7 @@ void cPlayer::Move()
 
 	MovingSpeedClamp();
 	moveVec = XMFLOAT2{ m_NowVect.x * m_NowSpeed,m_NowVect.y * m_NowSpeed };
-	
+
 
 	//回転の補間を行う
 	RotationCalculation(moveVec);
@@ -178,7 +206,7 @@ void cPlayer::InputAngleCorrection(DirectX::XMFLOAT2 inp)
 	float RotAng = ang;	//ここに回転角を入れる
 
 	//角度が最大回転角を上回っていれば最大回転角に変更する
-	if (ang > MaxAng) 
+	if (ang > MaxAng)
 		RotAng = MaxAng;
 
 	//入力が真後ろに近い場合は急旋回させる
@@ -262,6 +290,12 @@ void cPlayer::PlayerVectChange()
 	Scaling(m_ConstScal);
 }
 
+/// <summary>
+/// プレイヤーの移動範囲を制限する
+/// </summary>
+/// <param name="ProgressDir"></param>
+/// <param name="speed"></param>
+/// <returns></returns>
 DirectX::XMFLOAT2 cPlayer::MoveCorrection(DirectX::XMFLOAT2 ProgressDir, const float speed)
 {
 	//カメラから見て前方とを取得する

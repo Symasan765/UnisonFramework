@@ -11,6 +11,9 @@
 #include "LuaConvert.h"
 using namespace LuaConv;
 
+/// <summary>
+/// フォント描画クラスの初期化
+/// </summary>
 void cFontDraw::Draw()
 {
 	GetDirectX::Context()->IASetInputLayout(NULL);
@@ -42,10 +45,22 @@ void cFontDraw::Draw()
 	m_drawData.erase(m_drawData.begin(), m_drawData.end());
 }
 
+/// <summary>
+/// 解放処理
+/// </summary>
 cFontDraw::~cFontDraw() {
 
 }
 
+/// <summary>
+/// テキストデータを描画用バッファに格納しておく。これはループの最後にまとめて描画される
+/// </summary>
+/// <param name="_drawText">描画用テキスト</param>
+/// <param name="_x">スクリーン位置X</param>
+/// <param name="_y">スクリーン位置Y</param>
+/// <param name="_fontName">フォント名列挙対</param>
+/// <param name="scale">倍率</param>
+/// <param name="Color">カラー</param>
 void cFontDraw::TextDraw(std::string _drawText, const int _x, const int _y, FontName _fontName, float scale, DirectX::XMFLOAT3 Color)
 {
 	std::wstring text = StringToWString(_drawText);
